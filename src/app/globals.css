@@ -39,6 +39,8 @@ body {
   position: relative;
   height: 76svh;
   overflow: hidden;
+  /* Chrome can let video bleed past border-radius; clip explicitly. */
+  clip-path: inset(0 round 28px);
 }
 
 .reel-deck {
@@ -52,7 +54,7 @@ body {
   font-weight: 400;
   font-size: clamp(2.25rem, 4.6vw, 3.75rem);
   line-height: 1.05;
-  max-width: 14em;
+  max-width: 10em;
   text-wrap: balance;
 }
 

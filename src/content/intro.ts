@@ -1,7 +1,8 @@
 export const intro = {
-  heading: "Twenty months from grabbing rim to my first dunk",
+  heading: "I'm currently training to be a professional dunker",
   body: [
-    "I'm Dylan, a dunker from New York. I grabbed rim for the first time in December 2019, then spent the next twenty months jumping until I finally threw one down in August 2021.",
-    "I haven't stopped since. These days it's windmills and dunks over people, and I jump with the Illinois Dunk Club. Use the iPod to flip through the clips.",
+    "Going into high school, I became obsessed with the idea of dunking. I jumped every day until I hit my first dunk going into my junior year. Since then I've made so much progress, but not without major hurdles.",
+    "In July 2025, I tore my meniscus at a gymnastics open gym. I got surgery and spent the next 4 months recovering, just to break my ankle immediately after.",
+    'To push myself to get healthy, I\'ve been posting my journey on Instagram. Now I have a 43" vertical and I\'m aiming to compete in the Dunkman regional qualifiers in November!',
   ],
 };
