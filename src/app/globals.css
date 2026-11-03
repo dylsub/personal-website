@@ -130,41 +130,43 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
   padding: clamp(1.5rem, 3.5vw, 2.5rem);
   text-shadow: 0 1px 10px rgb(0 0 0 / 0.35);
 }
 
+/* ---------- Footer ---------- */
+
+.site-footer {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem 3rem;
+}
+
 .instagram {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: rgb(18 18 18 / 0.38);
-  border: 1px solid rgb(255 255 255 / 0.16);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  transition: background 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  font-family: var(--font-pixel);
+  font-size: 1.05rem;
+  color: rgb(243 239 231 / 0.75);
+  transition: color 0.15s, background 0.15s;
 }
 
 .instagram svg {
-  width: 58%;
-  height: 58%;
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .instagram:hover {
-  background: rgb(18 18 18 / 0.55);
-  transform: scale(1.05);
+  color: var(--paper);
+  background: rgb(255 255 255 / 0.06);
 }
 
 .instagram:focus-visible {
   outline: 2px solid var(--paper);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .caption-title {
