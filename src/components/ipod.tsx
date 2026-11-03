@@ -1,6 +1,10 @@
 "use client";
 
-import { useRef, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import type { Dunk } from "@/content/dunks";
 
 // How far the wheel has to turn (in radians) to move the selection one row.
@@ -41,6 +45,17 @@ export function IPod({
   // Set when a press turned into a scroll, so the button under the finger
   // doesn't also fire when it's released.
   const scrolledRef = useRef(false);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  // Keep the highlighted row on screen as the list grows past what fits.
+  useEffect(() => {
+    const list = listRef.current;
+    const row = list?.children[cursor] as HTMLElement | undefined;
+    if (!list || !row) return;
+    if (row.offsetTop < list.scrollTop) list.scrollTop = row.offsetTop;
+    else if (row.offsetTop + row.offsetHeight > list.scrollTop + list.clientHeight)
+      list.scrollTop = row.offsetTop + row.offsetHeight - list.clientHeight;
+  }, [cursor]);
 
   const angleFrom = (x: number, y: number) => {
     const rect = wheelRef.current!.getBoundingClientRect();
@@ -105,7 +120,7 @@ export function IPod({
             </span>
           </div>
 
-          <ul className="lcd-list" aria-label="Dunks">
+          <ul ref={listRef} className="lcd-list" aria-label="Dunks">
             {dunks.map((dunk, index) => (
               <li key={dunk.id}>
                 <button

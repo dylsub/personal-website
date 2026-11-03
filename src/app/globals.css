@@ -235,7 +235,11 @@ body {
 }
 
 .lcd-list {
-  padding-top: 0.8cqw;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 0.8cqw 0 2cqw;
+  overflow: hidden;
 }
 
 .lcd-row {
@@ -262,7 +266,6 @@ body {
 }
 
 .lcd-footer {
-  margin-top: auto;
   padding: 0 3cqw 2.5cqw;
 }
 
