@@ -93,7 +93,6 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
         <div className="film-vignette" />
         <FilmGrain burst={burst} />
         <div className="film-flicker" />
-        <div className="film-shade" />
 
         <div className="caption">
           <div aria-live="polite">
@@ -114,16 +113,31 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
+              stroke="url(#instagram-gradient)"
               strokeWidth={2}
             >
+              <defs>
+                <linearGradient
+                  id="instagram-gradient"
+                  x1="0"
+                  y1="1"
+                  x2="1"
+                  y2="0"
+                >
+                  <stop offset="0" stopColor="#feda75" />
+                  <stop offset="0.3" stopColor="#fa7e1e" />
+                  <stop offset="0.55" stopColor="#d62976" />
+                  <stop offset="0.8" stopColor="#962fbf" />
+                  <stop offset="1" stopColor="#4f5bd5" />
+                </linearGradient>
+              </defs>
               <rect x="3" y="3" width="18" height="18" rx="5" />
               <circle cx="12" cy="12" r="4" />
               <circle
                 cx="17.3"
                 cy="6.7"
                 r="1.1"
-                fill="currentColor"
+                fill="url(#instagram-gradient)"
                 stroke="none"
               />
             </svg>
