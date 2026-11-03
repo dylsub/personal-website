@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Dunk } from "@/content/dunks";
 import { FilmGrain } from "@/components/film-grain";
 import { IPod } from "@/components/ipod";
+import { site } from "@/content/site";
 
 const BURST_MS = 420;
 
@@ -92,14 +93,41 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
         <div className="film-vignette" />
         <FilmGrain burst={burst} />
         <div className="film-flicker" />
+        <div className="film-shade" />
 
-        <div className="caption" aria-live="polite">
-          <h2 className="caption-title">{dunk.title}</h2>
-          <p className="caption-date">
-            <time dateTime={dunk.date}>
-              {dateFormat.format(new Date(dunk.date))}
-            </time>
-          </p>
+        <div className="caption">
+          <div aria-live="polite">
+            <h2 className="caption-title">{dunk.title}</h2>
+            <p className="caption-date">
+              <time dateTime={dunk.date}>
+                {dateFormat.format(new Date(dunk.date))}
+              </time>
+            </p>
+          </div>
+          <a
+            className="instagram"
+            href={site.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle
+                cx="17.3"
+                cy="6.7"
+                r="1.1"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+          </a>
         </div>
       </section>
 
