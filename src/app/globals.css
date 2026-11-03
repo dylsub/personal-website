@@ -187,6 +187,7 @@ body {
 
 .ipod {
   container-type: inline-size;
+  position: relative;
   display: flex;
   flex-direction: column;
   width: var(--ipod-width);
@@ -205,6 +206,38 @@ body {
     0 18px 40px -20px rgb(0 0 0 / 0.6);
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Instagram handle, set into the body below the wheel */
+.ipod-handle {
+  position: absolute;
+  right: 7cqw;
+  bottom: 6cqw;
+  display: inline-flex;
+  align-items: center;
+  gap: 2cqw;
+  padding: 1.5cqw 2.5cqw;
+  border-radius: 999px;
+  font-family: var(--font-pixel);
+  font-size: 4.4cqw;
+  color: #55534d;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.4);
+  transition: color 0.15s, background 0.15s;
+}
+
+.ipod-handle svg {
+  width: 5.5cqw;
+  height: 5.5cqw;
+}
+
+.ipod-handle:hover {
+  color: #2f2e2b;
+  background: rgb(0 0 0 / 0.06);
+}
+
+.ipod-handle:focus-visible {
+  outline: 0.7cqw solid #55534d;
+  outline-offset: 0.4cqw;
 }
 
 .ipod-window {

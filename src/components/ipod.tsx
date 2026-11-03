@@ -6,6 +6,8 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import type { Dunk } from "@/content/dunks";
+import { InstagramIcon } from "@/components/instagram-icon";
+import { site } from "@/content/site";
 
 // How far the wheel has to turn (in radians) to move the selection one row.
 const STEP = Math.PI / 6;
@@ -201,6 +203,15 @@ export function IPod({
           />
         </div>
       </div>
+      <a
+        className="ipod-handle"
+        href={`https://www.instagram.com/${site.instagram}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <InstagramIcon />
+        <span>@{site.instagram}</span>
+      </a>
     </div>
   );
 }
