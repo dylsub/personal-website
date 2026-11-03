@@ -52,8 +52,7 @@ body {
 .intro-lead {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .intro-heading {

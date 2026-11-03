@@ -5,5 +5,5 @@ export const intro = {
     'In July 2025, I tore my meniscus. I got surgery and spent the next 4 months recovering, just to break my ankle immediately after. I\'ve been posting my recovery journey on Instagram since.',
   ],
   goal:
-    'Now I have a 43" vertical and I\'m aiming to compete in the Dunkman regional qualifiers in November!',
+    'I have a 43" vertical and I\'m aiming to compete in the Dunkman regional qualifiers in November!',
 };
