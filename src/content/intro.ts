@@ -4,6 +4,6 @@ export const intro = {
     "Going into high school, I became obsessed with the idea of dunking, finally hitting my first dunk going into junior year.",
     'In July 2025, I tore my meniscus. I got surgery and spent the next 4 months recovering, just to break my ankle immediately after. I\'ve been posting my recovery journey on Instagram since.',
   ],
-  footer:
+  goal:
     'Now I have a 43" vertical and I\'m aiming to compete in the Dunkman regional qualifiers in November!',
 };

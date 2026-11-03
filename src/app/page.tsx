@@ -5,13 +5,15 @@ import { intro } from "@/content/intro";
 export default function Home() {
   return (
     <main className="reel">
-      <h1 className="intro-heading">{intro.heading}</h1>
+      <div className="intro-lead">
+        <h1 className="intro-heading">{intro.heading}</h1>
+        <p className="intro-goal">{intro.goal}</p>
+      </div>
       <div className="intro-body">
         {intro.body.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
-      <p className="intro-footer">{intro.footer}</p>
       <DunkPlayer dunks={dunks} />
     </main>
   );
