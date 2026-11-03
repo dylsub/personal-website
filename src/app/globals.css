@@ -15,11 +15,14 @@ html,
 body {
   background: var(--page);
   color: var(--paper);
+  /* Pixelify's "fi"/"fl" ligatures read as "A" */
+  font-variant-ligatures: none;
 }
 
 /* ---------- Reel layout ---------- */
 
 .reel {
+  --ipod-width: min(280px, 72vw);
   display: grid;
   gap: 1.25rem;
   max-width: 72rem;
@@ -39,16 +42,45 @@ body {
 }
 
 .reel-deck {
-  --ipod-width: min(280px, 72vw);
   display: grid;
   place-items: center;
+}
+
+/* Heading sits over the video column, body text over the iPod column. */
+.intro-heading {
+  font-family: var(--font-pixel);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  line-height: 1.05;
+  max-width: 14em;
+  text-wrap: balance;
+}
+
+.intro-body {
+  display: grid;
+  gap: 0.9em;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgb(243 239 231 / 0.78);
 }
 
 @media (min-width: 64rem) {
   .reel {
     --reel-height: clamp(32rem, 80svh, 46rem);
-    grid-template-columns: minmax(0, 1fr) auto;
+    --ipod-width: calc(var(--reel-height) / 2.3);
+    grid-template-columns: minmax(0, 1fr) var(--ipod-width);
     padding-inline: 2rem;
+  }
+
+  .intro-body {
+    align-self: end;
+    margin-bottom: 2.5rem;
+  }
+
+  .intro-heading {
+    margin-bottom: 2.5rem;
   }
 
   .reel-film,
@@ -56,9 +88,6 @@ body {
     height: var(--reel-height);
   }
 
-  .reel-deck {
-    --ipod-width: calc(var(--reel-height) / 2.3);
-  }
 }
 
 /* ---------- Film stage ---------- */

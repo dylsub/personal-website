@@ -67,8 +67,7 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   };
 
   return (
-    <main className="reel">
-      <h1 className="sr-only">Dunks</h1>
+    <>
 
       <section className="reel-film film">
         <video
@@ -122,6 +121,6 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
           onToggleSound={() => setMuted((m) => !m)}
         />
       </section>
-    </main>
+    </>
   );
 }
