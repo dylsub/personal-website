@@ -74,6 +74,10 @@ body {
   color: rgb(243 239 231 / 0.78);
 }
 
+.numeric {
+  font-family: var(--font-numeric);
+}
+
 .intro-goal {
   font-family: var(--font-pixel);
   font-size: 1.1rem;
