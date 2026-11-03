@@ -11,6 +11,7 @@ export default function Home() {
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
+      <p className="intro-footer">{intro.footer}</p>
       <DunkPlayer dunks={dunks} />
     </main>
   );
