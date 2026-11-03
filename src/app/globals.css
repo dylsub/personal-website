@@ -136,7 +136,7 @@ body {
 }
 
 .caption-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-pixel);
   font-weight: 400;
   font-size: clamp(1.9rem, 3vw, 2.4rem);
   line-height: 1.1;
@@ -144,7 +144,7 @@ body {
 
 .caption-date {
   margin-top: 0.4rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-pixel);
   font-size: 1.05rem;
   opacity: 0.9;
 }
