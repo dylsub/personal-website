@@ -73,7 +73,8 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
       <section className="reel-film film">
         <video
           ref={videoRef}
-          className="film-video absolute inset-0 size-full object-cover object-center"
+          className="film-video absolute inset-0 size-full object-cover"
+          style={{ objectPosition: dunk.position ?? "center" }}
           src={dunk.src}
           poster={dunk.poster}
           autoPlay

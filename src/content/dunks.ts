@@ -5,6 +5,8 @@ export type Dunk = {
   date: string;
   src: string;
   poster: string;
+  /** CSS object-position for the crop; defaults to centered. */
+  position?: string;
 };
 
 export const dunks: Dunk[] = [
@@ -21,5 +23,6 @@ export const dunks: Dunk[] = [
     date: "2026-10-11",
     src: "/videos/windmill.mp4",
     poster: "/videos/windmill.jpg",
+    position: "50% 35%",
   },
 ];
