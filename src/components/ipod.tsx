@@ -41,7 +41,6 @@ export function IPod({
   // Set when a press turned into a scroll, so the button under the finger
   // doesn't also fire when it's released.
   const scrolledRef = useRef(false);
-  const wheelDeltaRef = useRef(0);
 
   const angleFrom = (x: number, y: number) => {
     const rect = wheelRef.current!.getBoundingClientRect();
@@ -90,19 +89,10 @@ export function IPod({
     if (!scrolledRef.current) action();
   };
 
-  const handleWheel = (event: React.WheelEvent) => {
-    wheelDeltaRef.current += event.deltaY;
-    while (Math.abs(wheelDeltaRef.current) >= 60) {
-      const direction = Math.sign(wheelDeltaRef.current);
-      onScroll(direction);
-      wheelDeltaRef.current -= direction * 60;
-    }
-  };
-
   const progress = duration ? Math.min(elapsed / duration, 1) : 0;
 
   return (
-    <div className="ipod" onWheel={handleWheel}>
+    <div className="ipod">
       <div className="ipod-window">
         <div className="lcd">
           <div className="lcd-titlebar">
