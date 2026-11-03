@@ -1,1 +1,417 @@
 @import "tailwindcss";
+
+:root {
+  --concrete: #a7a39a;
+  --paper: #efe9dc;
+  --graphite: #4a4843;
+  --graphite-deep: #2a2926;
+  --wheel-label: #cfcabd;
+  --lcd: #c2c8b1;
+  --lcd-ink: #262b21;
+
+  --ipod-width: min(260px, 70vw);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --ipod-width: min(270px, 40svh);
+  }
+}
+
+html {
+  background: var(--concrete);
+}
+
+body {
+  background: var(--concrete);
+  color: var(--paper);
+}
+
+/* ---------- Film stage ---------- */
+
+.film {
+  background: #1d1c1a;
+}
+
+.film-video {
+  filter: sepia(0.35) saturate(0.7) contrast(1.08) brightness(1.03);
+}
+
+/* Grey wash that lifts the shadows and flattens the footage. */
+.film-tint {
+  position: absolute;
+  inset: 0;
+  background: rgb(128 128 128 / 0.2);
+  pointer-events: none;
+}
+
+.film-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgb(20 18 14 / 0.6) 100%
+  );
+  pointer-events: none;
+}
+
+.film-grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity 0.35s ease-out;
+}
+
+.film-grain[data-burst] {
+  opacity: 0.9;
+  mix-blend-mode: normal;
+  transition: none;
+}
+
+.film-flicker {
+  position: absolute;
+  inset: 0;
+  background: #fff8e8;
+  opacity: 0;
+  pointer-events: none;
+  animation: flicker 0.9s steps(1) infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.02; }
+  12% { opacity: 0.05; }
+  23% { opacity: 0; }
+  41% { opacity: 0.035; }
+  58% { opacity: 0.01; }
+  74% { opacity: 0.06; }
+  86% { opacity: 0.015; }
+}
+
+.film-scratch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.film-scratch::before,
+.film-scratch::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(255 248 232 / 0.35);
+  opacity: 0;
+}
+
+.film-scratch::before {
+  animation: scratch-a 4.3s steps(1) infinite;
+}
+
+.film-scratch::after {
+  background: rgb(20 18 14 / 0.4);
+  animation: scratch-b 6.1s steps(1) infinite;
+}
+
+@keyframes scratch-a {
+  0% { left: 22%; opacity: 0.8; }
+  3% { left: 23%; opacity: 0.4; }
+  6% { opacity: 0; }
+  48% { left: 71%; opacity: 0.6; }
+  51% { opacity: 0; }
+  77% { left: 39%; opacity: 0.7; }
+  79% { left: 38.6%; opacity: 0.3; }
+  82% { opacity: 0; }
+}
+
+@keyframes scratch-b {
+  0% { opacity: 0; }
+  30% { left: 58%; opacity: 0.7; }
+  33% { opacity: 0; }
+  64% { left: 12%; opacity: 0.5; }
+  66% { left: 12.4%; opacity: 0.8; }
+  69% { opacity: 0; }
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  text-shadow: 0 1px 12px rgb(20 18 14 / 0.45);
+}
+
+.caption-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 7.5vw, 7rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  max-width: 12ch;
+  text-wrap: balance;
+}
+
+.caption-date {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+/* ---------- Deck (right panel) ---------- */
+
+.deck {
+  background-color: var(--concrete);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- iPod ---------- */
+
+.ipod {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  width: var(--ipod-width);
+  aspect-ratio: 1 / 2.12;
+  border-radius: calc(var(--ipod-width) * 0.11);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.025) 0 1px,
+      transparent 1px 3px
+    ),
+    linear-gradient(100deg, #403f3a 0%, var(--graphite) 40%, #55534d 55%, #3a3935 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    inset 0 -2px 6px rgb(0 0 0 / 0.35),
+    0 2px 0 #23221f,
+    0 36px 60px -24px rgb(36 33 28 / 0.6),
+    0 10px 20px rgb(36 33 28 / 0.25);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ipod-window {
+  margin: 8cqw 7cqw 0;
+  height: 72cqw;
+  padding: 3.5cqw;
+  border-radius: 4cqw;
+  background: #161614;
+  box-shadow:
+    inset 0 0 0 0.5cqw rgb(0 0 0 / 0.6),
+    0 0.4cqw 0 rgb(255 255 255 / 0.08);
+}
+
+.lcd {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.2cqw;
+  background: radial-gradient(ellipse at 40% 30%, #cdd3bd, var(--lcd) 70%);
+  color: var(--lcd-ink);
+  font-family: var(--font-pixel);
+  box-shadow:
+    inset 0 1.5cqw 3cqw rgb(0 0 0 / 0.18),
+    inset 0 0 0 0.4cqw rgb(0 0 0 / 0.1);
+}
+
+/* Faint pixel grid over the screen */
+.lcd::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.04) 0 1px, transparent 1px 2px),
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.04) 0 1px, transparent 1px 2px);
+  pointer-events: none;
+}
+
+.lcd-titlebar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 10.5cqw;
+  padding: 0 2.5cqw;
+  font-size: 5cqw;
+  border-bottom: 0.5cqw solid rgb(38 43 33 / 0.7);
+  background: rgb(38 43 33 / 0.06);
+}
+
+.lcd-titlebar > :last-child {
+  justify-self: end;
+}
+
+.lcd-glyph {
+  display: inline-flex;
+}
+
+.lcd-glyph svg {
+  height: 3cqw;
+  width: auto;
+}
+
+.lcd-list {
+  padding-top: 0.8cqw;
+}
+
+.lcd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  width: 100%;
+  height: 10cqw;
+  padding: 0 2.5cqw;
+  font-size: 5.2cqw;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lcd-row[data-highlighted] {
+  background: var(--lcd-ink);
+  color: var(--lcd);
+}
+
+.lcd-row:focus-visible {
+  outline: 0.6cqw dashed currentColor;
+  outline-offset: -1cqw;
+}
+
+.lcd-footer {
+  margin-top: auto;
+  padding: 0 3cqw 2.5cqw;
+}
+
+.lcd-progress {
+  height: 2.6cqw;
+  border: 0.5cqw solid var(--lcd-ink);
+  padding: 0.4cqw;
+}
+
+.lcd-progress > div {
+  height: 100%;
+  background: var(--lcd-ink);
+}
+
+.lcd-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1cqw;
+  font-size: 3.6cqw;
+}
+
+.ipod-lower {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+
+.wheel {
+  position: relative;
+  width: 76cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #34332f, var(--graphite-deep) 75%);
+  box-shadow:
+    inset 0 0.6cqw 1.2cqw rgb(0 0 0 / 0.45),
+    inset 0 -0.4cqw 0.6cqw rgb(255 255 255 / 0.05),
+    0 0.4cqw 0 rgb(255 255 255 / 0.08);
+  touch-action: none;
+  cursor: grab;
+}
+
+.wheel:active {
+  cursor: grabbing;
+}
+
+.wheel-btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: var(--wheel-label);
+  border-radius: 3cqw;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.wheel-btn svg {
+  width: 7cqw;
+  height: 7cqw;
+}
+
+.wheel-btn:hover {
+  color: #f1ede3;
+}
+
+.wheel-btn:active svg {
+  transform: scale(0.9);
+}
+
+.wheel-top,
+.wheel-bottom {
+  left: 50%;
+  width: 28cqw;
+  height: 22cqw;
+  translate: -50% 0;
+}
+
+.wheel-top { top: 0; }
+.wheel-bottom { bottom: 0; }
+
+.wheel-left,
+.wheel-right {
+  top: 50%;
+  width: 22cqw;
+  height: 28cqw;
+  translate: 0 -50%;
+}
+
+.wheel-left { left: 0; }
+.wheel-right { right: 0; }
+
+.wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 31cqw;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: linear-gradient(170deg, #55534d, var(--graphite) 55%, #3c3b37);
+  box-shadow:
+    0 0 0 0.5cqw rgb(0 0 0 / 0.35),
+    inset 0 0.4cqw 0 rgb(255 255 255 / 0.12),
+    0 0.8cqw 1.5cqw rgb(0 0 0 / 0.35);
+  cursor: pointer;
+}
+
+.wheel-center:active {
+  background: linear-gradient(170deg, #4a4843, #3f3d39 55%, #353430);
+  box-shadow:
+    0 0 0 0.5cqw rgb(0 0 0 / 0.35),
+    inset 0 0.6cqw 1cqw rgb(0 0 0 / 0.3);
+}
+
+.wheel-btn:focus-visible,
+.wheel-center:focus-visible {
+  outline: 0.7cqw solid var(--wheel-label);
+  outline-offset: 0.4cqw;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-flicker,
+  .film-scratch::before,
+  .film-scratch::after {
+    animation: none;
+  }
+}
