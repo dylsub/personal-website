@@ -9,8 +9,8 @@ const FPS = 18;
 const RESOLUTION = 0.5;
 
 /**
- * Animated film static. Pre-renders a handful of noise frames and cycles
- * through them. `burst` cranks it up into full TV static for a moment.
+ * TV static. Pre-renders a handful of noise frames and cycles through them.
+ * Invisible until `burst` flashes it over the video for a moment.
  */
 export function FilmGrain({ burst = false }: { burst?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -51,6 +51,8 @@ export function FilmGrain({ burst = false }: { burst?: boolean }) {
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
       if (now - lastDraw < 1000 / FPS) return;
+      // Hidden between bursts; skip the work.
+      if (getComputedStyle(canvas).opacity === "0") return;
       lastDraw = now;
       frame = (frame + 1) % FRAME_COUNT;
       ctx.putImageData(frames[frame], 0, 0);

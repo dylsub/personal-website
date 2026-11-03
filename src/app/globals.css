@@ -2,7 +2,6 @@
 
 :root {
   --page: #1c1c1b;
-  --card: #353533;
   --paper: #f3efe7;
   --silver: #bdbab2;
   --graphite: #4a4843;
@@ -35,21 +34,19 @@ body {
 
 .reel-film {
   position: relative;
-  height: 68svh;
+  height: 76svh;
   overflow: hidden;
 }
 
 .reel-deck {
-  --ipod-width: min(250px, 68vw);
+  --ipod-width: min(280px, 72vw);
   display: grid;
   place-items: center;
-  padding: 2rem 1rem;
-  background: var(--card);
 }
 
 @media (min-width: 64rem) {
   .reel {
-    --reel-height: clamp(30rem, 72svh, 40rem);
+    --reel-height: clamp(32rem, 80svh, 46rem);
     grid-template-columns: minmax(0, 1fr) auto;
     padding-inline: 2rem;
   }
@@ -60,8 +57,7 @@ body {
   }
 
   .reel-deck {
-    --ipod-width: calc((var(--reel-height) - 2.5rem) / 2.3);
-    padding: 1.25rem;
+    --ipod-width: calc(var(--reel-height) / 2.3);
   }
 }
 
@@ -99,7 +95,7 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.13;
+  opacity: 0;
   mix-blend-mode: overlay;
   image-rendering: pixelated;
   pointer-events: none;
@@ -161,7 +157,7 @@ body {
   flex-direction: column;
   width: var(--ipod-width);
   aspect-ratio: 1 / 2.3;
-  border-radius: calc(var(--ipod-width) * 0.11);
+  border-radius: 28px;
   background:
     repeating-linear-gradient(
       90deg,
@@ -172,9 +168,7 @@ body {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.5),
     inset 0 -2px 6px rgb(0 0 0 / 0.2),
-    0 2px 0 #77746d,
-    0 36px 60px -24px rgb(36 33 28 / 0.6),
-    0 10px 20px rgb(36 33 28 / 0.25);
+    0 18px 40px -20px rgb(0 0 0 / 0.6);
   user-select: none;
   -webkit-user-select: none;
 }
