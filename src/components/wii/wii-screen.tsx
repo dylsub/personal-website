@@ -19,6 +19,7 @@ type WiiScreenProps = {
   onOpen: (index: number) => void;
   onBack: () => void;
   onSlide: (index: number) => void;
+  onPlay: () => void;
 };
 
 export function WiiScreen({
@@ -31,6 +32,7 @@ export function WiiScreen({
   onOpen,
   onBack,
   onSlide,
+  onPlay,
 }: WiiScreenProps) {
   const [showHelp, setShowHelp] = useState(false);
   const game = games[selected];
@@ -164,14 +166,20 @@ export function WiiScreen({
             <button type="button" className="wii-pill" onClick={onBack}>
               Menu
             </button>
-            <a
-              className="wii-pill"
-              href={game.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Play
-            </a>
+            {game.embed ? (
+              <button type="button" className="wii-pill" onClick={onPlay}>
+                Play
+              </button>
+            ) : (
+              <a
+                className="wii-pill"
+                href={game.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Play
+              </a>
+            )}
           </div>
         </div>
       )}

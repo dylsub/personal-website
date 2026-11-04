@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { GameModal } from "@/components/game-modal";
 import type { Game } from "@/content/games";
 import { WiiRemote, type RemoteButton } from "@/components/wii/wii-remote";
 import { WiiScreen } from "@/components/wii/wii-screen";
@@ -16,6 +17,7 @@ export function WiiSection({ games }: { games: Game[] }) {
   const [selected, setSelected] = useState(0);
   const [slide, setSlide] = useState(0);
   const [rumble, setRumble] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   const game = games[selected];
   const slides = [game.cover, ...game.screenshots];
@@ -45,7 +47,10 @@ export function WiiSection({ games }: { games: Game[] }) {
 
   const backToMenu = () => setView("menu");
 
-  const play = () => window.open(game.url, "_blank", "noopener,noreferrer");
+  const play = () =>
+    game.embed
+      ? setPlaying(true)
+      : window.open(game.url, "_blank", "noopener,noreferrer");
 
   const step = (delta: number) =>
     setSlide((s) => (s + delta + slides.length) % slides.length);
@@ -104,8 +109,16 @@ export function WiiSection({ games }: { games: Game[] }) {
           onOpen={openChannel}
           onBack={backToMenu}
           onSlide={setSlide}
+          onPlay={play}
         />
       </div>
+      {playing && game.embed && (
+        <GameModal
+          title={game.title}
+          src={game.embed}
+          onClose={() => setPlaying(false)}
+        />
+      )}
     </section>
   );
 }
