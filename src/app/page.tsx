@@ -24,6 +24,9 @@ function withReadableDates(text: string) {
 export default function Home() {
   return (
     <main>
+      <header className="site-banner">
+        <p>todo... more coming soon</p>
+      </header>
       <section className="reel">
         <div className="intro-lead">
           <h1 className="intro-heading">{intro.heading}</h1>

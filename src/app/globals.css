@@ -19,6 +19,23 @@ body {
   font-variant-ligatures: none;
 }
 
+/* ---------- Banner ---------- */
+
+.site-banner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 8vh, 5rem) 1rem 0;
+  font-family: var(--font-pixel);
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  line-height: 1;
+}
+
+@media (min-width: 64rem) {
+  .site-banner {
+    padding-inline: 2rem;
+  }
+}
+
 /* ---------- Reel layout ---------- */
 
 .reel {
