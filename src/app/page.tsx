@@ -1,4 +1,5 @@
 import { DunkPlayer } from "@/components/dunk-player";
+import { GamesIntro } from "@/components/games-intro";
 import { WiiSection } from "@/components/wii/wii-section";
 import { dunks } from "@/content/dunks";
 import { games } from "@/content/games";
@@ -35,6 +36,7 @@ export default function Home() {
         </div>
         <DunkPlayer dunks={dunks} />
       </section>
+      <GamesIntro />
       <WiiSection games={games} />
     </main>
   );
