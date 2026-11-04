@@ -254,13 +254,32 @@ function PointerCursor() {
   return (
     <div ref={ref} className="wii-cursor" aria-hidden>
       <svg viewBox="0 0 40 48">
+        <defs>
+          {/* One gradient across every shape so the hand shades as a whole. */}
+          <linearGradient
+            id="wii-cursor-shade"
+            gradientUnits="userSpaceOnUse"
+            x1="12"
+            y1="4"
+            x2="32"
+            y2="44"
+          >
+            <stop offset="0.35" stopColor="#fff" />
+            <stop offset="1" stopColor="#dbe4ea" />
+          </linearGradient>
+        </defs>
         <g className="wii-cursor-outline">
           <HandShapes />
         </g>
         <g className="wii-cursor-fill">
           <HandShapes />
         </g>
-        <text x="22.5" y="36.5" textAnchor="middle">
+        {/* Creases between the knuckles, under the curled fingers, and along the thumb */}
+        <path
+          className="wii-cursor-crease"
+          d="M21 16.5V22 M26.8 18.5V23.5 M32.2 21.5V25.5 M21.5 27c4 1.2 9 1.6 14 0.8 M12.6 23.5c1.2 3 1.2 6.5 0 9.5"
+        />
+        <text x="24.5" y="38.5" textAnchor="middle">
           1
         </text>
       </svg>
@@ -271,16 +290,18 @@ function PointerCursor() {
 function HandShapes() {
   return (
     <>
-      <rect x="13" y="2" width="8" height="24" rx="4" />
-      <rect x="20" y="14" width="7" height="12" rx="3.5" />
-      <rect x="26" y="16.5" width="7" height="11" rx="3.5" />
-      <rect x="9" y="18" width="24" height="24" rx="8" />
+      {/* Index finger, then the middle, ring and little knuckles stepping down */}
+      <rect x="13" y="2" width="8" height="23" rx="4" />
+      <rect x="20.5" y="12.5" width="7" height="14" rx="3.5" />
+      <rect x="26.5" y="14.5" width="6.5" height="13" rx="3.25" />
+      <rect x="31.5" y="18" width="5.5" height="11" rx="2.75" />
+      <rect x="10" y="20" width="27" height="22" rx="9.5" />
       <ellipse
-        cx="9.5"
-        cy="28"
-        rx="4.5"
-        ry="7.5"
-        transform="rotate(-28 9.5 28)"
+        cx="9"
+        cy="27.5"
+        rx="4.2"
+        ry="8"
+        transform="rotate(-35 9 27.5)"
       />
     </>
   );
