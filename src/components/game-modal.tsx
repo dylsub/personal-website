@@ -12,11 +12,12 @@ type GameModalProps = {
 export function GameModal({ title, src, onClose }: GameModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
+  // No close() on cleanup: it fires `close`, which would call onClose and
+  // unmount the modal the moment it opens (React mounts twice in dev).
+  // Unmounting removes the dialog, which takes it off the screen anyway.
   useEffect(() => {
     const dialog = ref.current;
-    if (!dialog) return;
-    dialog.showModal();
-    return () => dialog.close();
+    if (dialog && !dialog.open) dialog.showModal();
   }, []);
 
   return (
