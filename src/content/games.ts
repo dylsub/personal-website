@@ -24,7 +24,7 @@ export const games: Game[] = [
     tagline: "Arcade game made with Kaboom.js",
     url: "https://github.com/dylsub/BeeCareful",
     embed: "/games/bee-careful/index.html",
-    cover: "/games/bee-careful/cover.png",
+    cover: "/games/bee-careful/shot-1.png",
     screenshots: [
       "/games/bee-careful/shot-1.png",
       "/games/bee-careful/shot-2.png",

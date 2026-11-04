@@ -136,7 +136,7 @@ export function WiiScreen({
                 <Image
                   src={src}
                   alt={
-                    src === game.cover
+                    game.screenshots.length === 0
                       ? `${game.title} cover`
                       : `${game.title} screenshot ${i + 1}`
                   }
