@@ -398,6 +398,72 @@
     0 0.4cqw 1cqw rgb(50 60 70 / 0.15);
 }
 
+/* ---------- CRT ---------- */
+
+/* Composite video never resolves fine detail; soften the picture a touch. */
+.wii-menu,
+.wii-channel {
+  filter: blur(0.35px) contrast(1.04) saturate(1.06);
+}
+
+.film-grain.wii-static {
+  z-index: 15;
+  opacity: 0.08;
+}
+
+.wii-crt {
+  position: absolute;
+  inset: 0;
+  z-index: 16;
+  pointer-events: none;
+  background:
+    /* Glare off the glass, high on the left */
+    radial-gradient(
+      ellipse 60% 45% at 28% 18%,
+      rgb(255 255 255 / 0.1),
+      transparent 70%
+    ),
+    /* The tube darkens toward its edges */
+    radial-gradient(
+      ellipse 85% 85% at 50% 50%,
+      transparent 62%,
+      rgb(20 28 36 / 0.22)
+    ),
+    /* 240 scanlines, near enough to a 480i picture */
+    repeating-linear-gradient(
+      rgb(0 0 0 / 0.07) 0 0.11cqw,
+      transparent 0.11cqw 0.3125cqw
+    );
+}
+
+/* A faint band of interference that rolls slowly down the picture */
+.wii-crt::after {
+  content: "";
+  position: absolute;
+  inset: -20% 0 auto;
+  height: 20%;
+  background: linear-gradient(
+    transparent,
+    rgb(255 255 255 / 0.05) 45%,
+    rgb(0 0 0 / 0.03) 55%,
+    transparent
+  );
+  animation: wii-roll 9s linear infinite;
+}
+
+@keyframes wii-roll {
+  to {
+    transform: translateY(600%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wii-crt::after {
+    animation: none;
+    display: none;
+  }
+}
+
 /* ---------- Pointer ---------- */
 
 .wii-cursor {
@@ -409,7 +475,7 @@
   pointer-events: none;
   opacity: 0;
   /* Pivot on the fingertip */
-  transform-origin: 42.5% 4%;
+  transform-origin: 41.25% 4%;
   filter: drop-shadow(0.15cqw 0.3cqw 0.35cqw rgb(0 0 0 / 0.3));
   transition: opacity 0.12s;
 }
@@ -423,29 +489,41 @@
   overflow: visible;
 }
 
-.wii-cursor-outline > * {
-  fill: #2f97dc;
-  stroke: #2f97dc;
-  stroke-width: 3;
+.wii-cursor-outline {
+  fill: #20232b;
+  stroke: #20232b;
+  stroke-width: 3.8;
   stroke-linejoin: round;
 }
 
-.wii-cursor-fill > * {
+.wii-cursor-fill {
   fill: url(#wii-cursor-shade);
+  stroke: #fff;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
 }
 
 .wii-cursor-crease {
   fill: none;
-  stroke: #c3cfd8;
-  stroke-width: 0.8;
+  stroke: #20232b;
+  stroke-width: 1;
   stroke-linecap: round;
+}
+
+.wii-cursor-grab,
+.wii-cursor[data-pressed] .wii-cursor-point {
+  display: none;
+}
+
+.wii-cursor[data-pressed] .wii-cursor-grab {
+  display: inline;
 }
 
 .wii-cursor text {
   font-family: var(--font-rounded);
-  font-size: 11px;
+  font-size: 9.5px;
   font-weight: 900;
-  fill: #2f97dc;
+  fill: #3567d6;
 }
 
 /* ---------- Remote ---------- */

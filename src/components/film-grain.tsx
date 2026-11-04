@@ -12,7 +12,13 @@ const RESOLUTION = 0.5;
  * TV static. Pre-renders a handful of noise frames and cycles through them.
  * Invisible until `burst` flashes it over the video for a moment.
  */
-export function FilmGrain({ burst = false }: { burst?: boolean }) {
+export function FilmGrain({
+  burst = false,
+  className,
+}: {
+  burst?: boolean;
+  className?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -72,7 +78,7 @@ export function FilmGrain({ burst = false }: { burst?: boolean }) {
   return (
     <canvas
       ref={canvasRef}
-      className="film-grain"
+      className={className ? `film-grain ${className}` : "film-grain"}
       data-burst={burst || undefined}
       aria-hidden
     />
