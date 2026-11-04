@@ -61,7 +61,11 @@ export const games: Game[] = [
     tagline: "Explorative adventure game",
     url: "https://dylsub.itch.io/pocapola",
     cover: "/games/pocapola/cover.png",
-    screenshots: [],
+    screenshots: [
+      "/games/pocapola/shot-1.png",
+      "/games/pocapola/shot-2.png",
+      "/games/pocapola/shot-3.png",
+    ],
     genre: "Adventure",
     platforms: ["Browser", "Windows", "macOS", "Linux"],
     madeWith: "Unity",
