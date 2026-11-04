@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import type { Game } from "@/content/games";
+import { slidesFor, type Game } from "@/content/games";
 
 const SLOTS = 12;
 // Fingertip position inside the 40×48 cursor artwork.
@@ -36,7 +36,7 @@ export function WiiScreen({
 }: WiiScreenProps) {
   const [showHelp, setShowHelp] = useState(false);
   const game = games[selected];
-  const slides = [game.cover, ...game.screenshots];
+  const slides = slidesFor(game);
 
   return (
     <div className="wii-screen" data-off={!on || undefined}>
@@ -132,9 +132,9 @@ export function WiiScreen({
                 <Image
                   src={src}
                   alt={
-                    i === 0
+                    src === game.cover
                       ? `${game.title} cover`
-                      : `${game.title} screenshot ${i}`
+                      : `${game.title} screenshot ${i + 1}`
                   }
                   fill
                   sizes="(min-width: 64rem) 900px, 100vw"

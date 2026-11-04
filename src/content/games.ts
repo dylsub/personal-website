@@ -7,7 +7,7 @@ export type Game = {
   /** A build served from /public that plays in a modal instead of opening `url`. */
   embed?: string;
   cover: string;
-  /** Extra images beyond the cover; may be empty. */
+  /** The channel slideshow. When empty, the cover is shown instead. */
   screenshots: string[];
   genre: string;
   platforms: string[];
@@ -76,11 +76,7 @@ export const games: Game[] = [
     tagline: "2D platformer for GMTK Game Jam 2021",
     url: "https://dylsub.itch.io/atoms2d",
     cover: "/games/atoms-2d/cover.jpg",
-    screenshots: [
-      "/games/atoms-2d/shot-1.jpg",
-      "/games/atoms-2d/shot-2.jpg",
-      "/games/atoms-2d/shot-3.jpg",
-    ],
+    screenshots: ["/games/atoms-2d/shot-2.jpg", "/games/atoms-2d/shot-3.jpg"],
     genre: "Platformer, Adventure",
     platforms: ["Browser"],
     madeWith: "Unity",
@@ -127,3 +123,7 @@ export const games: Game[] = [
     ],
   },
 ];
+
+export function slidesFor(game: Game) {
+  return game.screenshots.length ? game.screenshots : [game.cover];
+}

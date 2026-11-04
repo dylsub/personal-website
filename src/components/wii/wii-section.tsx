@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GameModal } from "@/components/game-modal";
-import type { Game } from "@/content/games";
+import { slidesFor, type Game } from "@/content/games";
 import { WiiRemote, type RemoteButton } from "@/components/wii/wii-remote";
 import { WiiScreen } from "@/components/wii/wii-screen";
 import "./wii.css";
@@ -20,7 +20,7 @@ export function WiiSection({ games }: { games: Game[] }) {
   const [playing, setPlaying] = useState(false);
 
   const game = games[selected];
-  const slides = [game.cover, ...game.screenshots];
+  const slides = slidesFor(game);
 
   useEffect(() => {
     if (!rumble) return;
