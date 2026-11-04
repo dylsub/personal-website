@@ -133,11 +133,22 @@ export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
         2
       </button>
 
+      <span className="remote-print remote-home-label" aria-hidden>
+        HOME
+      </span>
+
+      {/* Player lights, each with its number printed in dots underneath */}
       <div className="remote-leds" aria-hidden>
-        <span data-lit={on || undefined} />
-        <span />
-        <span />
-        <span />
+        {[1, 2, 3, 4].map((player) => (
+          <span key={player} className="remote-led">
+            <span data-lit={(on && player === 1) || undefined} />
+            <span className="remote-led-dots">
+              {Array.from({ length: player }, (_, i) => (
+                <i key={i} />
+              ))}
+            </span>
+          </span>
+        ))}
       </div>
     </div>
   );
