@@ -1,0 +1,679 @@
+/* ---------- Layout ---------- */
+
+.console {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem clamp(3rem, 10vh, 6rem);
+}
+
+.console-inner {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .console {
+    padding-inline: 2rem;
+  }
+
+  /* Screen and remote share one height and fill the row exactly:
+     width = w + 0.75w / 4.1 + gap */
+  .console-inner {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .console-inner > .wii-screen {
+    width: calc((100cqw - 1.25rem) / 1.1829);
+  }
+
+  .console-inner > .remote {
+    order: 0;
+    height: calc((100cqw - 1.25rem) / 1.1829 * 0.75);
+    width: calc((100cqw - 1.25rem) / 1.1829 * 0.75 / 4.1);
+  }
+}
+
+/* ---------- Screen ---------- */
+
+.wii-screen {
+  --wii-bg: #eef1f3;
+  --wii-line: #e3e7ea;
+  --wii-text: #7b838b;
+  --wii-border: #c8cfd5;
+  --wii-blue: #34b3ee;
+
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 28px;
+  clip-path: inset(0 round 28px);
+  background:
+    repeating-linear-gradient(var(--wii-line) 0 1px, transparent 1px 0.9cqw),
+    var(--wii-bg);
+  color: var(--wii-text);
+  font-family: var(--font-rounded);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (pointer: fine) {
+  .wii-screen,
+  .wii-screen * {
+    cursor: none;
+  }
+}
+
+.wii-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+
+.wii-screen[data-off]::after {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wii-screen :focus-visible {
+  outline: 0.5cqw solid var(--wii-blue);
+  outline-offset: 0.4cqw;
+}
+
+/* ---------- Channel grid ---------- */
+
+.wii-menu {
+  position: absolute;
+  inset: 0;
+}
+
+.wii-grid {
+  position: absolute;
+  top: 5.5cqw;
+  left: 6cqw;
+  right: 6cqw;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.2cqw 2.4cqw;
+}
+
+.wii-tile {
+  position: relative;
+  aspect-ratio: 1.42;
+  overflow: hidden;
+  border: 0.35cqw solid var(--wii-border);
+  border-radius: 2.4cqw;
+  background: linear-gradient(#fafbfc, #e8ecef);
+  box-shadow: 0 0.3cqw 0.8cqw rgb(60 70 80 / 0.15);
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.wii-tile img {
+  object-fit: cover;
+}
+
+.wii-tile[data-empty] {
+  background: linear-gradient(#f7f8f9, #e2e6e9);
+  box-shadow:
+    inset 0 0.3cqw 0.6cqw rgb(255 255 255 / 0.9),
+    0 0.2cqw 0.5cqw rgb(60 70 80 / 0.08);
+}
+
+.wii-tile[data-selected] {
+  z-index: 1;
+  transform: scale(1.07);
+  border-color: var(--wii-blue);
+  box-shadow:
+    0 0 0 0.5cqw rgb(52 179 238 / 0.35),
+    0 0.8cqw 1.6cqw rgb(40 60 80 / 0.25);
+}
+
+.wii-tile-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.4cqw 1.2cqw 0.8cqw;
+  overflow: hidden;
+  font-size: 1.6cqw;
+  font-weight: 800;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.65));
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.wii-tile[data-selected] .wii-tile-label {
+  opacity: 1;
+}
+
+/* ---------- Bottom bar ---------- */
+
+.wii-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 19cqw;
+}
+
+.wii-bar-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: #dfe3e6;
+}
+
+.wii-bar-line {
+  fill: none;
+  stroke: var(--wii-blue);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.wii-round {
+  position: absolute;
+  bottom: 2.8cqw;
+  display: grid;
+  place-items: center;
+  width: 12.5cqw;
+  aspect-ratio: 1;
+  border: 0.35cqw solid var(--wii-border);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, #eceff2);
+  box-shadow: 0 0.4cqw 1cqw rgb(50 60 70 / 0.18);
+  font-size: 2.1cqw;
+  font-weight: 800;
+  color: var(--wii-text);
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.wii-round:hover {
+  border-color: var(--wii-blue);
+  color: var(--wii-blue);
+}
+
+.wii-round-left {
+  left: 3.5cqw;
+}
+
+.wii-round-right {
+  right: 3.5cqw;
+  font-size: 4.6cqw;
+}
+
+.wii-clock {
+  position: absolute;
+  top: 5.6cqw;
+  left: 50%;
+  translate: -50% 0;
+  text-align: center;
+  color: #8e959c;
+}
+
+.wii-clock time {
+  font-size: 6cqw;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wii-clock small {
+  margin-left: 0.6cqw;
+  font-size: 2.4cqw;
+}
+
+.wii-clock span {
+  display: block;
+  margin-top: 0.6cqw;
+  font-size: 2.3cqw;
+  font-weight: 700;
+}
+
+.wii-help {
+  position: absolute;
+  right: 4cqw;
+  bottom: 17cqw;
+  max-width: 36cqw;
+  padding: 1.4cqw 1.8cqw;
+  border: 0.3cqw solid var(--wii-border);
+  border-radius: 2cqw;
+  background: #fff;
+  box-shadow: 0 0.6cqw 1.6cqw rgb(50 60 70 / 0.18);
+  font-size: 1.8cqw;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---------- Channel preview ---------- */
+
+.wii-channel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  animation: wii-channel-in 0.28s ease-out;
+}
+
+@keyframes wii-channel-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.wii-channel-art {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.wii-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.wii-slide[data-active] {
+  opacity: 1;
+}
+
+.wii-slide-backdrop {
+  object-fit: cover;
+  transform: scale(1.2);
+  filter: blur(3cqw) brightness(0.55);
+}
+
+.wii-slide-image {
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.wii-channel-heading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 3cqw 4cqw 7cqw;
+  color: #fff;
+  background: linear-gradient(rgb(0 0 0 / 0.7), transparent);
+}
+
+.wii-channel-heading h3 {
+  font-size: 4cqw;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.wii-channel-heading p {
+  margin-top: 0.6cqw;
+  font-size: 2cqw;
+  font-weight: 600;
+}
+
+.wii-channel-heading .wii-channel-note {
+  display: inline-block;
+  margin-top: 1.2cqw;
+  padding: 0.5cqw 1.4cqw;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.18);
+  font-size: 1.7cqw;
+}
+
+.wii-dots {
+  position: absolute;
+  bottom: 2cqw;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  gap: 1.2cqw;
+}
+
+.wii-dots button {
+  width: 1.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.4);
+}
+
+.wii-dots button[data-active] {
+  background: #fff;
+}
+
+.wii-channel-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5cqw;
+  height: 17cqw;
+  border-top: 0.35cqw solid var(--wii-blue);
+  background:
+    repeating-linear-gradient(var(--wii-line) 0 1px, transparent 1px 0.9cqw),
+    var(--wii-bg);
+}
+
+.wii-pill {
+  display: grid;
+  place-items: center;
+  width: 27cqw;
+  height: 8.5cqw;
+  border: 0.35cqw solid var(--wii-border);
+  border-radius: 3cqw;
+  background: linear-gradient(#fff, #edf0f2);
+  box-shadow: 0 0.4cqw 1cqw rgb(50 60 70 / 0.15);
+  font-size: 3cqw;
+  font-weight: 800;
+  color: var(--wii-text);
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+}
+
+.wii-pill:hover {
+  border-color: var(--wii-blue);
+  color: var(--wii-blue);
+  box-shadow:
+    0 0 0 0.5cqw rgb(52 179 238 / 0.3),
+    0 0.4cqw 1cqw rgb(50 60 70 / 0.15);
+}
+
+/* ---------- Pointer ---------- */
+
+.wii-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 5.2cqw;
+  pointer-events: none;
+  opacity: 0;
+  /* Pivot on the fingertip */
+  transform-origin: 42.5% 4%;
+  filter: drop-shadow(0 0.3cqw 0.4cqw rgb(0 0 0 / 0.3));
+  transition: opacity 0.12s;
+}
+
+.wii-cursor[data-visible] {
+  opacity: 1;
+}
+
+.wii-cursor svg {
+  display: block;
+  overflow: visible;
+}
+
+.wii-cursor-outline > * {
+  fill: #2f97dc;
+  stroke: #2f97dc;
+  stroke-width: 3.4;
+  stroke-linejoin: round;
+}
+
+.wii-cursor-fill > * {
+  fill: #fff;
+}
+
+.wii-cursor text {
+  font-family: var(--font-rounded);
+  font-size: 12px;
+  font-weight: 900;
+  fill: #2f97dc;
+}
+
+/* ---------- Remote ---------- */
+
+.remote {
+  container-type: inline-size;
+  position: relative;
+  flex: none;
+  order: 2;
+  width: calc(360px / 4.1);
+  height: 360px;
+  border-radius: 30cqw / 24cqw;
+  background: linear-gradient(90deg, #d9dde1, #f6f7f8 22%, #fff 55%, #e6e9ec);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.7),
+    inset -2cqw 0 4cqw rgb(0 0 0 / 0.05),
+    0 24px 40px -20px rgb(0 0 0 / 0.7);
+  font-family: var(--font-rounded);
+}
+
+.remote[data-rumble] {
+  animation: remote-rumble 0.32s linear;
+}
+
+@keyframes remote-rumble {
+  20% { translate: -1.5px 0.5px; }
+  40% { translate: 1.5px -0.5px; }
+  60% { translate: -1px 0; }
+  80% { translate: 1px 0.5px; }
+}
+
+.remote button {
+  cursor: pointer;
+}
+
+.remote button:focus-visible {
+  outline: 1.4cqw solid var(--wii-blue, #34b3ee);
+  outline-offset: 1cqw;
+}
+
+.remote-btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #fff, #e6e9ec);
+  box-shadow:
+    0 0.8cqw 1.6cqw rgb(0 0 0 / 0.18),
+    inset 0 -0.6cqw 1cqw rgb(0 0 0 / 0.06);
+  font-weight: 800;
+  line-height: 1;
+  color: #858d95;
+  transition: transform 0.08s;
+}
+
+.remote-btn:active {
+  transform: translateY(0.6cqw) scale(0.95);
+  box-shadow: 0 0.2cqw 0.6cqw rgb(0 0 0 / 0.2);
+}
+
+.remote-btn svg {
+  width: 55%;
+  height: 55%;
+}
+
+.remote-power {
+  top: 12cqw;
+  left: 16cqw;
+  width: 17cqw;
+  height: 17cqw;
+  color: #9aa1a8;
+}
+
+.dpad {
+  position: absolute;
+  top: 40cqw;
+  left: 50%;
+  width: 62cqw;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  filter: drop-shadow(0 0.8cqw 1cqw rgb(0 0 0 / 0.18));
+}
+
+.dpad-arm,
+.dpad-hub {
+  position: absolute;
+  background: linear-gradient(#f2f4f5, #dfe3e6);
+}
+
+.dpad-arm {
+  transition: transform 0.08s;
+}
+
+.dpad-arm::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  border: 4cqw solid transparent;
+}
+
+.dpad-up,
+.dpad-down {
+  left: 33%;
+  width: 34%;
+  height: 34%;
+}
+
+.dpad-left,
+.dpad-right {
+  top: 33%;
+  width: 34%;
+  height: 34%;
+}
+
+.dpad-up { top: 0; border-radius: 3cqw 3cqw 0 0; }
+.dpad-down { bottom: 0; border-radius: 0 0 3cqw 3cqw; }
+.dpad-left { left: 0; border-radius: 3cqw 0 0 3cqw; }
+.dpad-right { right: 0; border-radius: 0 3cqw 3cqw 0; }
+
+.dpad-up::after { border-bottom-color: #a2a9b0; border-top-width: 0; }
+.dpad-down::after { border-top-color: #a2a9b0; border-bottom-width: 0; }
+.dpad-left::after { border-right-color: #a2a9b0; border-left-width: 0; }
+.dpad-right::after { border-left-color: #a2a9b0; border-right-width: 0; }
+
+.dpad-up:active { transform: translateY(0.6cqw); }
+.dpad-down:active { transform: translateY(-0.6cqw); }
+.dpad-left:active { transform: translateX(0.6cqw); }
+.dpad-right:active { transform: translateX(-0.6cqw); }
+
+.dpad-hub {
+  top: 33%;
+  left: 33%;
+  width: 34%;
+  height: 34%;
+  pointer-events: none;
+}
+
+.remote-a {
+  top: 116cqw;
+  left: 50%;
+  width: 44cqw;
+  height: 44cqw;
+  translate: -50% 0;
+  font-size: 17cqw;
+}
+
+/* The B trigger lives underneath; show it peeking out the side. */
+.remote-b {
+  top: 122cqw;
+  right: -11cqw;
+  width: 12cqw;
+  height: 32cqw;
+  border-radius: 0 5cqw 5cqw 0;
+  background: linear-gradient(90deg, #cfd4d8, #e9ecee);
+  font-size: 7cqw;
+}
+
+.remote-minus,
+.remote-plus {
+  top: 196cqw;
+  width: 15cqw;
+  height: 15cqw;
+  font-size: 13cqw;
+}
+
+.remote-minus { left: 12cqw; }
+.remote-plus { right: 12cqw; }
+
+.remote-home {
+  top: 194cqw;
+  left: 50%;
+  width: 19cqw;
+  height: 19cqw;
+  translate: -50% 0;
+  color: #2aa4e3;
+  box-shadow:
+    0 0 0 1.2cqw #d7ebf6,
+    0 0.8cqw 1.6cqw rgb(0 0 0 / 0.18);
+}
+
+.remote-speaker {
+  position: absolute;
+  top: 234cqw;
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(5, 2.8cqw);
+  gap: 2.8cqw;
+  translate: -50% 0;
+}
+
+.remote-speaker span {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #b7bdc3;
+  box-shadow: inset 0 0.4cqw 0.4cqw rgb(0 0 0 / 0.25);
+}
+
+.remote-num {
+  left: 50%;
+  width: 28cqw;
+  height: 28cqw;
+  translate: -50% 0;
+  font-size: 14cqw;
+  background: radial-gradient(circle at 50% 35%, #f4f5f6, #dde1e4);
+}
+
+.remote-one { top: 270cqw; }
+.remote-two { top: 314cqw; }
+
+.remote-leds {
+  position: absolute;
+  top: 384cqw;
+  left: 50%;
+  display: flex;
+  gap: 5cqw;
+  translate: -50% 0;
+}
+
+.remote-leds span {
+  width: 8cqw;
+  height: 3.2cqw;
+  border-radius: 1cqw;
+  background: #c6cbd0;
+}
+
+.remote-leds span[data-lit] {
+  background: #2aa4e3;
+  box-shadow: 0 0 3cqw #2aa4e3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .remote[data-rumble],
+  .wii-channel {
+    animation: none;
+  }
+}

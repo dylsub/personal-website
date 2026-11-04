@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Pixelify_Sans, Tiny5 } from "next/font/google";
+import { Nunito, Pixelify_Sans, Tiny5 } from "next/font/google";
 import "./globals.css";
 
 const pixel = Pixelify_Sans({
@@ -14,6 +14,12 @@ const numeric = Tiny5({
   weight: "400",
 });
 
+// Rounded UI face for the Wii screen and remote.
+const rounded = Nunito({
+  variable: "--font-rounded",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Dylan Subramanian",
   description: "Personal website",
@@ -21,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${pixel.variable} ${numeric.variable} antialiased`}>
+    <html lang="en" className={`${pixel.variable} ${numeric.variable} ${rounded.variable} antialiased`}>
       <body>{children}</body>
     </html>
   );
