@@ -312,12 +312,16 @@
 
 .wii-channel-heading {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 3cqw 4cqw 7cqw;
+  top: 2.5cqw;
+  left: 2.5cqw;
+  max-width: 72%;
+  padding: 2cqw 2.8cqw 2.2cqw;
+  border-radius: 2.2cqw;
   color: #fff;
-  background: linear-gradient(rgb(0 0 0 / 0.7), transparent);
+  /* A dark plate reads on any screenshot, however busy */
+  background: rgb(12 14 18 / 0.86);
+  box-shadow: 0 0.6cqw 1.8cqw rgb(0 0 0 / 0.3);
+  text-shadow: 0 0.2cqw 0.4cqw rgb(0 0 0 / 0.5);
 }
 
 .wii-channel-heading h3 {
