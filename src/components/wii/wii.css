@@ -305,7 +305,8 @@
 }
 
 .wii-slide-image {
-  object-fit: contain;
+  /* Fill the screen edge to edge; trims a little off whichever sides overflow */
+  object-fit: cover;
   image-rendering: pixelated;
 }
 
