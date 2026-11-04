@@ -95,7 +95,11 @@ export const games: Game[] = [
     tagline: "2D platformer based on nature",
     url: "https://dylsub.itch.io/forbiddengrowth",
     cover: "/games/forbidden-growth/cover.png",
-    screenshots: [],
+    screenshots: [
+      "/games/forbidden-growth/shot-1.png",
+      "/games/forbidden-growth/shot-2.png",
+      "/games/forbidden-growth/shot-3.png",
+    ],
     genre: "Platformer",
     platforms: ["Browser"],
     madeWith: "Unity",
