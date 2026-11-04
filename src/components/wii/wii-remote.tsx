@@ -67,7 +67,7 @@ export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
           aria-label="Right"
           onClick={press("right")}
         />
-        <span className="dpad-hub" aria-hidden />
+        <DpadFace />
       </div>
 
       <button
@@ -76,13 +76,6 @@ export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
         onClick={press("a")}
       >
         A
-      </button>
-      <button
-        type="button"
-        className="remote-btn remote-b"
-        onClick={press("b")}
-      >
-        B
       </button>
 
       <button
@@ -151,5 +144,42 @@ export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * One molded cross: a single silhouette with a soft dish in the middle and
+ * small raised arrows. The buttons above it are invisible hit areas.
+ */
+function DpadFace() {
+  const arms = (
+    <>
+      <rect x="34" y="1" width="32" height="98" rx="5" />
+      <rect x="1" y="34" width="98" height="32" rx="5" />
+    </>
+  );
+  return (
+    <svg className="dpad-face" viewBox="0 0 100 100" aria-hidden>
+      <defs>
+        <linearGradient id="dpad-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e2343c" />
+          <stop offset="0.55" stopColor="#c4161f" />
+          <stop offset="1" stopColor="#a3111a" />
+        </linearGradient>
+        <radialGradient id="dpad-dish" cx="0.5" cy="0.45" r="0.5">
+          <stop offset="0" stopColor="#000" stopOpacity="0.28" />
+          <stop offset="1" stopColor="#000" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <g className="dpad-edge">{arms}</g>
+      <g fill="url(#dpad-body)">{arms}</g>
+      <circle cx="50" cy="50" r="13" fill="url(#dpad-dish)" />
+      <g className="dpad-arrows">
+        <path d="M50 9 56 16H44z" />
+        <path d="M50 91 44 84H56z" />
+        <path d="M9 50 16 44V56z" />
+        <path d="M91 50 84 56V44z" />
+      </g>
+    </svg>
   );
 }
