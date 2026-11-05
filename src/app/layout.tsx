@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         {children}
-        {process.env.NODE_ENV === "development" && <FontSwitcher />}
+        <FontSwitcher />
       </body>
     </html>
   );

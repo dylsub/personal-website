@@ -9,7 +9,8 @@ const apply = (combo: string) => {
   document.documentElement.dataset.fonts = combo;
 };
 
-/** Development-only picker for comparing the type pairings in place. */
+/** Picker for comparing the type pairings in place, open to visitors while
+ * the choice is being made. */
 export function FontSwitcher() {
   const selectRef = useRef<HTMLSelectElement>(null);
 

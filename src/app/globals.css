@@ -676,7 +676,7 @@ body {
   border: 0;
 }
 
-/* ---------- Font switcher (development only) ---------- */
+/* ---------- Font switcher (temporary, while pairings are tried) ---------- */
 
 .font-switcher {
   position: fixed;
