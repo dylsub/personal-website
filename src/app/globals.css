@@ -80,6 +80,27 @@ body {
   line-height: 1;
 }
 
+/* The byline over the banner: whose site this is */
+.site-author {
+  margin-bottom: 0.9rem;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: var(--display-settings);
+  letter-spacing: var(--display-tracking);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.2;
+}
+
+.site-author span {
+  margin-left: 0.4em;
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-variation-settings: normal;
+  letter-spacing: 0;
+  font-size: 0.8em;
+  color: rgb(243 239 231 / 0.55);
+}
+
 @media (min-width: 64rem) {
   .site-banner {
     padding-inline: 2rem;

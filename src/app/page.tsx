@@ -6,6 +6,20 @@ import { dunks } from "@/content/dunks";
 import { games } from "@/content/games";
 import { intro } from "@/content/intro";
 import { projects } from "@/content/projects";
+import { site } from "@/content/site";
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  alternateName: site.handle,
+  givenName: "Dylan",
+  familyName: "Subramanian",
+  url: site.url,
+  image: `${site.url}/opengraph-image`,
+  description: site.description,
+  sameAs: site.profiles,
+};
 
 const MONTH_YEAR =
   /((?:January|February|March|April|May|June|July|August|September|October|November|December) \d{4})/;
@@ -26,8 +40,18 @@ function withReadableDates(text: string) {
 export default function Home() {
   return (
     <main>
+      {/* Who this site is about, for search engines: my name, my handle,
+          and the profiles elsewhere that are also me */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <header className="site-banner">
-        <h1 className="sr-only">Dylan Subramanian</h1>
+        <h1 className="site-author">
+          {site.name} <span>@{site.handle}</span>
+        </h1>
         <p>todo... more coming soon</p>
       </header>
       <GamesIntro />
