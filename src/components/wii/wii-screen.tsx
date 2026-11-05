@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { FilmGrain } from "@/components/film-grain";
+import { backdrop, baked } from "@/components/wii/baked";
 import { usePageVisible } from "@/hooks/use-page-visible";
 import { favorites } from "@/content/favorites";
 import { slidesFor, type Game } from "@/content/games";
@@ -46,8 +46,7 @@ export function WiiScreen({
   return (
     <div className="wii-screen" data-off={!on || undefined}>
       <PointerCursor />
-      {/* The picture as it reaches a CRT over composite: grain, scanlines, tube */}
-      <FilmGrain className="wii-static" />
+      {/* The glass: grain, scanlines and the tube's falloff, as still images */}
       <div className="wii-crt" aria-hidden />
 
       {view === "menu" ? (
@@ -80,7 +79,7 @@ export function WiiScreen({
                   onClick={() => onOpen(i)}
                 >
                   <Image
-                    src={g.cover}
+                    src={baked(g.cover)}
                     alt=""
                     fill
                     sizes="(min-width: 64rem) 220px, 25vw"
@@ -146,14 +145,7 @@ export function WiiScreen({
                 data-active={i === slide || undefined}
               >
                 <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="10vw"
-                  className="wii-slide-backdrop"
-                />
-                <Image
-                  src={src}
+                  src={baked(src)}
                   alt={
                     game.screenshots.length === 0
                       ? `${game.title} cover`
@@ -231,7 +223,7 @@ function FavoritesTile({
     >
       {favorites.games.map((f) => (
         <span key={f.title} className="wii-mosaic-cell">
-          <Image src={f.cover} alt="" fill sizes="80px" />
+          <Image src={baked(f.cover)} alt="" fill sizes="80px" />
         </span>
       ))}
       <span className="wii-tile-label">{favorites.title}</span>
@@ -259,10 +251,10 @@ function FavoritesChannel({
             data-active={i === highlighted || undefined}
           >
             <Image
-              src={f.cover}
+              src={backdrop(f.cover)}
               alt=""
               fill
-              sizes="10vw"
+              sizes="48px"
               className="wii-slide-backdrop"
             />
           </div>
@@ -282,7 +274,7 @@ function FavoritesChannel({
                 onFocus={() => onHighlight(i)}
               >
                 <Image
-                  src={f.cover}
+                  src={baked(f.cover)}
                   alt={f.title}
                   fill
                   sizes="(min-width: 64rem) 140px, 15vw"
@@ -433,8 +425,10 @@ function Hand({
 }) {
   return (
     <g className={className}>
-      {/* Drawn twice: a wide dark stroke underneath leaves an outline, and a
-          thin white stroke on top gives it the inner rim. */}
+      {/* A hard shadow, then the hand drawn twice: a wide dark stroke
+          underneath leaves an outline, and a thin white stroke on top gives
+          it the inner rim. */}
+      <path className="wii-cursor-shadow" d={d} />
       <path className="wii-cursor-outline" d={d} />
       <path className="wii-cursor-fill" d={d} />
       <path className="wii-cursor-crease" d={`${creases} ${THUMB_CREASE}`} />

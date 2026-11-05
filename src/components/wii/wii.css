@@ -55,10 +55,7 @@
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 28px;
-  clip-path: inset(0 round 28px);
-  background:
-    repeating-linear-gradient(var(--wii-line) 0 1px, transparent 1px 0.9cqw),
-    var(--wii-bg);
+  background: url(/wii/stripes.png) 0 0 / 100% 0.9cqw var(--wii-bg);
   color: var(--wii-text);
   font-family: var(--font-rounded);
   user-select: none;
@@ -315,10 +312,9 @@
   opacity: 1;
 }
 
+/* Already blurred and dimmed in the file; stretching softens it further */
 .wii-slide-backdrop {
   object-fit: cover;
-  transform: scale(1.2);
-  filter: blur(3cqw) brightness(0.55);
 }
 
 .wii-slide-image {
@@ -389,9 +385,7 @@
   gap: 5cqw;
   height: 17cqw;
   border-top: 0.35cqw solid var(--wii-blue);
-  background:
-    repeating-linear-gradient(var(--wii-line) 0 1px, transparent 1px 0.9cqw),
-    var(--wii-bg);
+  background: url(/wii/stripes.png) 0 0 / 100% 0.9cqw var(--wii-bg);
 }
 
 .wii-pill {
@@ -485,36 +479,19 @@
 
 /* ---------- CRT ---------- */
 
-/* A still layer of faint grain across the picture. Held still, it costs
-   nothing once drawn, where moving static would redraw the screen every frame. */
-.film-grain.wii-static {
-  z-index: 15;
-  opacity: 0.05;
-}
-
+/* The glass, as still images baked by scripts/bake-wii.mjs: the tube's
+   falloff and glare, 240 scanlines (near enough to a 480i picture) and a
+   faint grain. The softening of the picture itself is baked into each image,
+   so nothing here filters or blends live. */
 .wii-crt {
   position: absolute;
   inset: 0;
   z-index: 16;
   pointer-events: none;
   background:
-    /* Glare off the glass, high on the left */
-    radial-gradient(
-      ellipse 60% 45% at 28% 18%,
-      rgb(255 255 255 / 0.1),
-      transparent 70%
-    ),
-    /* The tube darkens toward its edges */
-    radial-gradient(
-      ellipse 85% 85% at 50% 50%,
-      transparent 62%,
-      rgb(20 28 36 / 0.22)
-    ),
-    /* 240 scanlines, near enough to a 480i picture */
-    repeating-linear-gradient(
-      rgb(0 0 0 / 0.07) 0 0.11cqw,
-      transparent 0.11cqw 0.3125cqw
-    );
+    url(/wii/glass.webp) 0 0 / 100% 100%,
+    url(/wii/scanline.png) 0 0 / 100% 0.3125cqw,
+    url(/wii/grain.png) 0 0 / 256px 256px;
 }
 
 /* ---------- Pointer ---------- */
@@ -529,7 +506,6 @@
   opacity: 0;
   /* Pivot on the fingertip */
   transform-origin: 41.25% 4%;
-  filter: drop-shadow(0.15cqw 0.3cqw 0.35cqw rgb(0 0 0 / 0.3));
   transition: opacity 0.12s;
 }
 
@@ -540,6 +516,14 @@
 .wii-cursor svg {
   display: block;
   overflow: visible;
+}
+
+.wii-cursor-shadow {
+  fill: rgb(0 0 0 / 0.22);
+  stroke: rgb(0 0 0 / 0.22);
+  stroke-width: 3.8;
+  stroke-linejoin: round;
+  transform: translate(1.2px, 2.2px);
 }
 
 .wii-cursor-outline {
