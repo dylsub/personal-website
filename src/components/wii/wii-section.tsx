@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { GameModal } from "@/components/game-modal";
 import { slidesFor, type Game } from "@/content/games";
 import { WiiRemote, type RemoteButton } from "@/components/wii/wii-remote";
-import { WiiScreen } from "@/components/wii/wii-screen";
+import { FAVORITES_SLOT, SLOTS, WiiScreen } from "@/components/wii/wii-screen";
+import { favorites } from "@/content/favorites";
 import "./wii.css";
 
 const COLUMNS = 4;
@@ -19,8 +20,10 @@ export function WiiSection({ games }: { games: Game[] }) {
   const [rumble, setRumble] = useState(false);
   const [playing, setPlaying] = useState(false);
 
-  const game = games[selected];
-  const slides = slidesFor(game);
+  // The favorites slot has no game; its "slides" are the covers on its shelf.
+  const game = selected === FAVORITES_SLOT ? undefined : games[selected];
+  const slides = game ? slidesFor(game) : [];
+  const count = game ? slides.length : favorites.games.length;
 
   useEffect(() => {
     if (!rumble) return;
@@ -47,22 +50,44 @@ export function WiiSection({ games }: { games: Game[] }) {
 
   const backToMenu = () => setView("menu");
 
-  const play = () =>
-    game.embed
-      ? setPlaying(true)
-      : window.open(game.url, "_blank", "noopener,noreferrer");
+  const play = () => {
+    if (!game) return;
+    if (game.embed) setPlaying(true);
+    else window.open(game.url, "_blank", "noopener,noreferrer");
+  };
 
-  const step = (delta: number) =>
-    setSlide((s) => (s + delta + slides.length) % slides.length);
+  const step = (delta: number) => setSlide((s) => (s + delta + count) % count);
+
+  const filled = (i: number) => i < games.length || i === FAVORITES_SLOT;
 
   const moveSelection = (delta: number) =>
     setSelected((s) => {
-      const next = s + delta;
-      if (next >= 0 && next < games.length) return next;
-      // Moving down onto an empty slot lands on the last game in that row.
-      const lastRow = Math.floor((games.length - 1) / COLUMNS);
-      if (delta === COLUMNS && Math.floor(s / COLUMNS) < lastRow)
-        return games.length - 1;
+      const dir = Math.sign(delta);
+      // Sideways: skip over empty slots to the next channel.
+      if (Math.abs(delta) === 1) {
+        for (let i = s + dir; i >= 0 && i < SLOTS; i += dir)
+          if (filled(i)) return i;
+        return s;
+      }
+      // Up or down: the closest channel in the nearest row that has one.
+      const column = s % COLUMNS;
+      for (
+        let row = Math.floor(s / COLUMNS) + dir;
+        row >= 0 && row < SLOTS / COLUMNS;
+        row += dir
+      ) {
+        const inRow = Array.from(
+          { length: COLUMNS },
+          (_, c) => row * COLUMNS + c,
+        )
+          .filter(filled)
+          .sort(
+            (a, b) =>
+              Math.abs((a % COLUMNS) - column) -
+              Math.abs((b % COLUMNS) - column),
+          );
+        if (inRow.length) return inRow[0];
+      }
       return s;
     });
 
@@ -112,7 +137,7 @@ export function WiiSection({ games }: { games: Game[] }) {
           onPlay={play}
         />
       </div>
-      {playing && game.embed && (
+      {playing && game?.embed && (
         <GameModal
           title={game.title}
           src={game.embed}

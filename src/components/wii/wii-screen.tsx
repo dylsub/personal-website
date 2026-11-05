@@ -3,9 +3,12 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { FilmGrain } from "@/components/film-grain";
+import { favorites } from "@/content/favorites";
 import { slidesFor, type Game } from "@/content/games";
 
-const SLOTS = 12;
+export const SLOTS = 12;
+/** The bottom-right slot holds my all-time list instead of a game. */
+export const FAVORITES_SLOT = SLOTS - 1;
 // Fingertip position inside the 40×48 cursor artwork.
 const HOTSPOT = { x: 16.5, y: 2 };
 const ITCH_PROFILE = "https://dylsub.itch.io/";
@@ -37,7 +40,7 @@ export function WiiScreen({
 }: WiiScreenProps) {
   const [showHelp, setShowHelp] = useState(false);
   const game = games[selected];
-  const slides = slidesFor(game);
+  const slides = game ? slidesFor(game) : [];
 
   return (
     <div className="wii-screen" data-off={!on || undefined}>
@@ -50,6 +53,15 @@ export function WiiScreen({
         <div className="wii-menu">
           <div className="wii-grid">
             {Array.from({ length: SLOTS }, (_, i) => {
+              if (i === FAVORITES_SLOT)
+                return (
+                  <FavoritesTile
+                    key="favorites"
+                    selected={i === selected}
+                    onHover={() => onHover(i)}
+                    onOpen={() => onOpen(i)}
+                  />
+                );
               const g = games[i];
               if (!g)
                 return (
@@ -117,6 +129,12 @@ export function WiiScreen({
             )}
           </div>
         </div>
+      ) : !game ? (
+        <FavoritesChannel
+          highlighted={slide}
+          onHighlight={onSlide}
+          onBack={onBack}
+        />
       ) : (
         <div className="wii-channel">
           <div className="wii-channel-art">
@@ -187,6 +205,99 @@ export function WiiScreen({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function FavoritesTile({
+  selected,
+  onHover,
+  onOpen,
+}: {
+  selected: boolean;
+  onHover: () => void;
+  onOpen: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="wii-tile wii-tile-favorites"
+      data-selected={selected || undefined}
+      aria-label={favorites.title}
+      onPointerEnter={onHover}
+      onFocus={onHover}
+      onClick={onOpen}
+    >
+      {favorites.games.map((f) => (
+        <span key={f.title} className="wii-mosaic-cell">
+          <Image src={f.cover} alt="" fill sizes="80px" />
+        </span>
+      ))}
+      <span className="wii-tile-label">{favorites.title}</span>
+    </button>
+  );
+}
+
+/** My all-time list: a shelf of covers over the highlighted one, blurred. */
+function FavoritesChannel({
+  highlighted,
+  onHighlight,
+  onBack,
+}: {
+  highlighted: number;
+  onHighlight: (index: number) => void;
+  onBack: () => void;
+}) {
+  return (
+    <div className="wii-channel">
+      <div className="wii-channel-art">
+        {favorites.games.map((f, i) => (
+          <div
+            key={f.title}
+            className="wii-slide"
+            data-active={i === highlighted || undefined}
+          >
+            <Image
+              src={f.cover}
+              alt=""
+              fill
+              sizes="10vw"
+              className="wii-slide-backdrop"
+            />
+          </div>
+        ))}
+        <div className="wii-channel-heading">
+          <h3>{favorites.title}</h3>
+          <p>{favorites.tagline}</p>
+        </div>
+        <ol className="wii-shelf">
+          {favorites.games.map((f, i) => (
+            <li key={f.title}>
+              <button
+                type="button"
+                className="wii-shelf-cover"
+                data-active={i === highlighted || undefined}
+                onPointerEnter={() => onHighlight(i)}
+                onFocus={() => onHighlight(i)}
+              >
+                <Image
+                  src={f.cover}
+                  alt={f.title}
+                  fill
+                  sizes="(min-width: 64rem) 140px, 15vw"
+                />
+                <span className="wii-shelf-label">{f.title}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="wii-channel-actions">
+        <button type="button" className="wii-pill" onClick={onBack}>
+          Menu
+        </button>
+      </div>
     </div>
   );
 }

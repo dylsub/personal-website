@@ -163,6 +163,20 @@
   opacity: 1;
 }
 
+/* The all-time list tile: a mosaic of its nine covers */
+.wii-tile-favorites {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--wii-border);
+}
+
+.wii-mosaic-cell {
+  position: relative;
+  overflow: hidden;
+}
+
 /* ---------- Bottom bar ---------- */
 
 .wii-bar {
@@ -401,6 +415,69 @@
   box-shadow:
     0 0 0 0.5cqw rgb(52 179 238 / 0.3),
     0 0.4cqw 1cqw rgb(50 60 70 / 0.15);
+}
+
+/* ---------- All-time list channel ---------- */
+
+/* Five over four, centred under the heading */
+.wii-shelf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2.2cqw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.8cqw;
+  padding-inline: 13cqw;
+  list-style: none;
+}
+
+.wii-shelf-cover {
+  position: relative;
+  display: block;
+  width: 12.2cqw;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 1.4cqw;
+  box-shadow: 0 0.6cqw 1.6cqw rgb(0 0 0 / 0.4);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.wii-shelf-cover img {
+  object-fit: cover;
+}
+
+.wii-shelf-cover[data-active] {
+  z-index: 1;
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 0.5cqw var(--wii-blue),
+    0 1cqw 2.4cqw rgb(0 0 0 / 0.5);
+}
+
+/* A cream name plate on the highlighted cover */
+.wii-shelf-label {
+  position: absolute;
+  left: 0.6cqw;
+  right: 0.6cqw;
+  bottom: 0.6cqw;
+  padding: 0.7cqw 0.9cqw;
+  border-radius: 0.6cqw;
+  background: rgb(246 242 230 / 0.94);
+  color: #1d2a22;
+  font-size: 1.25cqw;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: left;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.wii-shelf-cover[data-active] .wii-shelf-label {
+  opacity: 1;
 }
 
 /* ---------- CRT ---------- */
