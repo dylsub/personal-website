@@ -13,55 +13,15 @@
 
 /* ---------- Type ---------- */
 
-/* Three roles, set per pairing: display (headlines), body (paragraphs)
-   and label (dates, small print). The iPod screen is always pixelated. */
-[data-fonts="1"] {
-  --font-display: var(--font-fraunces);
-  --font-body: var(--font-plex-mono);
-  --font-label: var(--font-plex-mono);
-  --display-weight: 600;
-  --display-settings: "SOFT" 100, "opsz" 96;
-  --display-tracking: -0.01em;
-  --body-size: 0.95rem;
-}
-
-[data-fonts="2"] {
-  --font-display: var(--font-young-serif);
-  --font-body: var(--font-courier);
-  --font-label: var(--font-courier);
-  --display-weight: 400;
-  --display-settings: normal;
-  --display-tracking: -0.01em;
-  --body-size: 1.02rem;
-}
-
-[data-fonts="3"] {
+/* Three roles: display (headlines), body (paragraphs) and label (dates,
+   small print). The iPod screen keeps its own pixel font. */
+:root {
   --font-display: var(--font-archivo);
   --font-body: var(--font-archivo);
   --font-label: var(--font-space-mono);
   --display-weight: 800;
   --display-settings: "wdth" 125;
   --display-tracking: -0.02em;
-  --body-size: 1rem;
-}
-
-[data-fonts="4"] {
-  --font-display: var(--font-bricolage);
-  --font-body: var(--font-bricolage);
-  --font-label: var(--font-dm-mono);
-  --display-weight: 700;
-  --display-settings: "opsz" 96, "wdth" 90;
-  --display-tracking: -0.02em;
-  --body-size: 1.05rem;
-}
-
-[data-fonts="5"] {
-  --font-display: var(--font-old-standard);
-  --font-body: var(--font-franklin);
-  --font-label: var(--font-franklin);
-  --display-weight: 700;
-  --display-settings: normal;
-  --display-tracking: 0;
   --body-size: 1rem;
 }
 
@@ -114,7 +74,8 @@ body {
   max-width: 72rem;
   margin: 0 auto;
   padding: clamp(2rem, 8vh, 5rem) 1rem 0;
-  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  /* Sized so the wide headline face holds the banner to one line on desktop */
+  font-size: clamp(2.25rem, 5.6vw, 4.4rem);
   line-height: 1;
 }
 
@@ -261,6 +222,7 @@ body {
 
 .film {
   background: #1d1c1a center / cover no-repeat;
+  cursor: pointer;
 }
 
 /* The clips' warm, flattened grade (a touch of sepia, less saturation and a
@@ -774,30 +736,4 @@ body {
   height: 563px;
   max-width: 100%;
   border: 0;
-}
-
-/* ---------- Font switcher (temporary, while pairings are tried) ---------- */
-
-.font-switcher {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  max-width: calc(100vw - 2rem);
-  padding: 0.4rem 0.6rem;
-  border-radius: 10px;
-  background: rgb(0 0 0 / 0.8);
-  font: 13px/1 system-ui, sans-serif;
-  color: #fff;
-}
-
-.font-switcher select {
-  min-width: 0;
-  padding: 0.2rem;
-  border-radius: 6px;
-  background: #fff;
-  color: #000;
 }

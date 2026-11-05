@@ -108,6 +108,9 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
             : undefined,
           backgroundPosition: dunk.position ?? "center",
         }}
+        // A click anywhere on the clip pauses or resumes it; the play button
+        // and the iPod are the keyboard routes.
+        onClick={togglePlay}
       >
         <video
           ref={videoRef}
@@ -131,7 +134,10 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
             type="button"
             className="film-play"
             aria-label={`Play ${dunk.title}`}
-            onClick={togglePlay}
+            onClick={(event) => {
+              event.stopPropagation();
+              togglePlay();
+            }}
           >
             {/* Shifted so the triangle's centroid, not its box, sits dead centre */}
             <svg viewBox="0.3 0 24 24" aria-hidden>
