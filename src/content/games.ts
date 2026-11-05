@@ -19,26 +19,6 @@ export type Game = {
 
 export const games: Game[] = [
   {
-    id: "bee-careful",
-    title: "Bee Careful",
-    tagline: "Arcade game made with Kaboom.js",
-    url: "https://github.com/dylsub/BeeCareful",
-    embed: "/games/bee-careful/index.html",
-    cover: "/games/bee-careful/shot-1.png",
-    screenshots: [
-      "/games/bee-careful/shot-1.png",
-      "/games/bee-careful/shot-2.png",
-      "/games/bee-careful/shot-3.png",
-    ],
-    genre: "Arcade",
-    platforms: ["Browser"],
-    madeWith: "Kaboom.js",
-    note: "Made for Kajam 2022",
-    description: [
-      "Steer the bee with WASD or the arrow keys, grab powerups and chase a high score.",
-    ],
-  },
-  {
     id: "smog-city",
     title: "Smog City",
     tagline: "2D pixel art platformer",
@@ -57,6 +37,26 @@ export const games: Game[] = [
       "SMOG CITY is a 2D platformer inspired by Earth Week's initiative toward becoming a more eco-friendly society. The main player is a mysteriously hooded human that visits a dystopian city, possibly haunted by their past decisions.",
       "SMOG CITY includes multiple unique levels that increase in difficulty. Your goal is to get to the end of all the levels while picking up batteries and pollution along the way.",
       "Created in Unity Engine and programmed with C# over the span of a month.",
+    ],
+  },
+  {
+    id: "bee-careful",
+    title: "Bee Careful",
+    tagline: "Arcade game made with Kaboom.js",
+    url: "https://github.com/dylsub/BeeCareful",
+    embed: "/games/bee-careful/index.html",
+    cover: "/games/bee-careful/shot-1.png",
+    screenshots: [
+      "/games/bee-careful/shot-1.png",
+      "/games/bee-careful/shot-2.png",
+      "/games/bee-careful/shot-3.png",
+    ],
+    genre: "Arcade",
+    platforms: ["Browser"],
+    madeWith: "Kaboom.js",
+    note: "Made for Kajam 2022",
+    description: [
+      "Steer the bee with WASD or the arrow keys, grab powerups and chase a high score.",
     ],
   },
   {
