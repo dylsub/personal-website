@@ -14,6 +14,8 @@ export type Game = {
   madeWith: string;
   /** One standout fact: a jam, an award. */
   note?: string;
+  /** Where the note can be checked, such as a winners announcement. */
+  noteUrl?: string;
   description: string[];
 };
 
@@ -55,6 +57,7 @@ export const games: Game[] = [
     platforms: ["Browser"],
     madeWith: "Kaboom.js",
     note: "Honorable mention, Kajam 2022 ($10,000 prize pool)",
+    noteUrl: "https://replit.com/blog/Kajam-winners22",
     description: [
       "Steer the bee with WASD or the arrow keys, grab powerups and chase a high score.",
     ],

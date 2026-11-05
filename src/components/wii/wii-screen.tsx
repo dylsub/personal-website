@@ -159,7 +159,21 @@ export function WiiScreen({
             <div className="wii-channel-heading">
               <h3>{game.title}</h3>
               <p>{game.tagline}</p>
-              {game.note && <p className="wii-channel-note">{game.note}</p>}
+              {game.note &&
+                (game.noteUrl ? (
+                  <a
+                    className="wii-channel-note"
+                    href={game.noteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {game.note}
+                    <ExternalIcon />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                ) : (
+                  <p className="wii-channel-note">{game.note}</p>
+                ))}
             </div>
             {slides.length > 1 && (
               <div className="wii-dots">
@@ -290,6 +304,15 @@ function FavoritesChannel({
         </button>
       </div>
     </div>
+  );
+}
+
+/** A box with an arrow leaving its corner: the link opens another site. */
+function ExternalIcon() {
+  return (
+    <svg className="wii-external" viewBox="0 0 16 16" aria-hidden>
+      <path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" />
+    </svg>
   );
 }
 
