@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { BlurImage } from "@/components/blur-image";
 import { useEffect, useRef, useState } from "react";
 import { backdrop, baked } from "@/components/wii/baked";
 import { usePageVisible } from "@/hooks/use-page-visible";
@@ -78,10 +79,9 @@ export function WiiScreen({
                   onFocus={() => onHover(i)}
                   onClick={() => onOpen(i)}
                 >
-                  <Image
+                  <BlurImage
                     src={baked(g.cover)}
                     alt=""
-                    fill
                     sizes="(min-width: 64rem) 220px, 25vw"
                   />
                   <span className="wii-tile-label">{g.title}</span>
@@ -144,14 +144,13 @@ export function WiiScreen({
                 className="wii-slide"
                 data-active={i === slide || undefined}
               >
-                <Image
+                <BlurImage
                   src={baked(src)}
                   alt={
                     game.screenshots.length === 0
                       ? `${game.title} cover`
                       : `${game.title} screenshot ${i + 1}`
                   }
-                  fill
                   sizes="(min-width: 64rem) 900px, 100vw"
                   className="wii-slide-image"
                 />
@@ -223,7 +222,7 @@ function FavoritesTile({
     >
       {favorites.games.map((f) => (
         <span key={f.title} className="wii-mosaic-cell">
-          <Image src={baked(f.cover)} alt="" fill sizes="80px" />
+          <BlurImage src={baked(f.cover)} alt="" sizes="80px" />
         </span>
       ))}
       <span className="wii-tile-label">{favorites.title}</span>
@@ -273,10 +272,9 @@ function FavoritesChannel({
                 onPointerEnter={() => onHighlight(i)}
                 onFocus={() => onHighlight(i)}
               >
-                <Image
+                <BlurImage
                   src={baked(f.cover)}
                   alt={f.title}
-                  fill
                   sizes="(min-width: 64rem) 140px, 15vw"
                 />
                 <span className="wii-shelf-label">{f.title}</span>

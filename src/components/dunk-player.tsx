@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Dunk } from "@/content/dunks";
+import { placeholderFor } from "@/components/blur-image";
 import { FilmGrain } from "@/components/film-grain";
 import { IPod } from "@/components/ipod";
 
@@ -98,7 +99,16 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
 
   return (
     <>
-      <section className="reel-film film">
+      {/* The poster's blurred stand-in shows until the poster itself loads */}
+      <section
+        className="reel-film film"
+        style={{
+          backgroundImage: placeholderFor(dunk.poster)
+            ? `url("${placeholderFor(dunk.poster)}")`
+            : undefined,
+          backgroundPosition: dunk.position ?? "center",
+        }}
+      >
         <video
           ref={videoRef}
           className="film-video absolute inset-0 size-full object-cover"
@@ -123,7 +133,8 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
             aria-label={`Play ${dunk.title}`}
             onClick={togglePlay}
           >
-            <svg viewBox="0 0 24 24" aria-hidden>
+            {/* Shifted so the triangle's centroid, not its box, sits dead centre */}
+            <svg viewBox="0.3 0 24 24" aria-hidden>
               <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
             </svg>
           </button>
