@@ -19,9 +19,9 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   // Off-screen or in a background tab, the clip pauses to save decoding work.
   // A pause the viewer chose sticks; only one we made is undone when the clip
-  // comes back into view.
+  // comes back into view. Nothing plays until the viewer presses play.
   const inViewRef = useRef(true);
-  const userPausedRef = useRef(false);
+  const userPausedRef = useRef(true);
   const [active, setActive] = useState(0);
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -59,7 +59,8 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   }, []);
 
   useEffect(() => {
-    if (canPlay()) videoRef.current?.play().catch(() => {});
+    if (canPlay() && !userPausedRef.current)
+      videoRef.current?.play().catch(() => {});
   }, [active]);
 
   useEffect(() => {
@@ -97,7 +98,6 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
 
   return (
     <>
-
       <section className="reel-film film">
         <video
           ref={videoRef}
@@ -108,7 +108,7 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-label={dunk.title}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
@@ -116,6 +116,18 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
           onLoadedMetadata={syncTime}
         />
         <div className="film-vignette" />
+        {!playing && (
+          <button
+            type="button"
+            className="film-play"
+            aria-label={`Play ${dunk.title}`}
+            onClick={togglePlay}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden>
+              <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+            </svg>
+          </button>
+        )}
         <FilmGrain burst={burst} />
 
         <p className="reel-count">
