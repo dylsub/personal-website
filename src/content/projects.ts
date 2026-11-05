@@ -37,7 +37,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "stem-and-buds",
-    title: "STEM & Buds Naperville",
+    title: "STEM & Buds",
     year: 2022,
     level: 74,
     type: "web",

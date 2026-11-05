@@ -5,7 +5,14 @@
   contain-intrinsic-size: auto 900px;
   max-width: 72rem;
   margin: 0 auto;
-  padding: clamp(2rem, 6vh, 4rem) 1rem clamp(4rem, 12vh, 7rem);
+  /* Shut, the binder sits evenly between its neighbours: the space below
+     (this padding plus the dunking section's top padding) matches the space
+     above (the Wii's bottom padding plus this top padding), each 15px roomier. */
+  padding: calc(clamp(2rem, 6vh, 4rem) + 15px) 1rem
+    calc(
+      clamp(3rem, 10vh, 6rem) + clamp(2rem, 6vh, 4rem) -
+        clamp(1.5rem, 8vh, 6rem) + 15px
+    );
 }
 
 /* The section's words. Above the binder on narrow screens; on wide ones
@@ -458,10 +465,17 @@
   stroke-linejoin: round;
 }
 
+/* Hung just below the binder in the section's bottom margin, so it takes
+   no room of its own: the binder's height is the same shut or open. */
 .binder-controls {
+  position: absolute;
+  top: calc(100% + 1.25rem);
+  left: 50%;
+  translate: -50% 0;
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  white-space: nowrap;
   font-family: var(--font-label);
   font-size: 0.85rem;
   color: rgb(243 239 231 / 0.65);
@@ -582,8 +596,9 @@
   background: rgb(0 0 0 / 0.75);
 }
 
+/* As large as the screen allows, leaving room for the buttons beneath */
 .card-viewer .pcard {
-  width: min(380px, 85vw, (100dvh - 9rem) * 63 / 88);
+  width: min(640px, 92vw, (100dvh - 7rem) * 63 / 88);
 }
 
 .card-viewer-actions {
@@ -664,11 +679,11 @@
 
 .pcard-face {
   position: absolute;
-  inset: 4.2cqw;
+  inset: 2.6cqw;
   display: flex;
   flex-direction: column;
   gap: 1.2cqw;
-  padding: 2.4cqw 3.2cqw 2.2cqw;
+  padding: 2.4cqw 2.8cqw 2.2cqw;
   border-radius: 2cqw;
   background: linear-gradient(170deg, var(--face-deep), var(--face) 55%);
 }
@@ -758,7 +773,11 @@
 .pcard-art {
   position: relative;
   flex: none;
-  aspect-ratio: 16 / 10;
+  /* Reaches a little into the face's side padding, wider than the text */
+  margin-inline: -1.2cqw;
+  /* As wide-shaped as the widest screenshot, so every one shows its full
+     width; narrower ones give up a sliver at the bottom instead */
+  aspect-ratio: 1.84;
   overflow: hidden;
   border: 1cqw solid var(--frame);
   box-shadow:
@@ -772,7 +791,9 @@
   object-position: top;
 }
 
+/* As wide as the art above it */
 .pcard-info {
+  margin-inline: -1.2cqw;
   margin-top: -0.6cqw;
   padding: 0.6cqw 2cqw;
   border-radius: 999px;
@@ -787,6 +808,15 @@
   margin-top: 1cqw;
   font-size: 5.1cqw;
   line-height: 1.35;
+}
+
+/* In a phone's small pockets the text is too small to read anyway (a tap
+   opens the card), so it gives up a little size to keep everything in. */
+@container (max-width: 180px) {
+  .pcard-description {
+    font-size: 4.6cqw;
+    line-height: 1.3;
+  }
 }
 
 /* Set like a card's flavour text */

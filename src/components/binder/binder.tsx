@@ -340,7 +340,7 @@ function CardViewer({
         project={project}
         number={number}
         total={total}
-        sizes="(min-width: 40rem) 380px, 85vw"
+        sizes="(min-width: 40rem) 640px, 92vw"
         live
       />
       <div className="card-viewer-actions">
