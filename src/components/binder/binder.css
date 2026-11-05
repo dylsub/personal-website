@@ -1,0 +1,776 @@
+/* ---------- Section ---------- */
+
+.binder-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vh, 4rem) 1rem clamp(4rem, 12vh, 7rem);
+}
+
+/* The section's words. Above the binder on narrow screens; on wide ones
+   they sit in the empty left half beside the shut binder, and the open
+   pages cover them. */
+.binder-intro {
+  justify-self: stretch;
+  max-width: 30rem;
+}
+
+.binder[data-wide] .binder-intro {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.binder[data-phase="open"] .binder-intro {
+  visibility: hidden;
+}
+
+.binder-heading {
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  line-height: 1.05;
+}
+
+/* One paragraph, its first sentence run in at full brightness as the lead */
+.binder-lede {
+  margin-top: 1.1rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgb(243 239 231 / 0.68);
+}
+
+.binder-lede strong {
+  font-weight: 600;
+  color: var(--paper);
+}
+
+/* Set flush right, so the arrow points straight at the cover */
+.binder-cue {
+  margin-top: 1.75rem;
+  text-align: right;
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  color: rgb(243 239 231 / 0.55);
+}
+
+.binder:not([data-wide]) .binder-cue {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .binder-section {
+    padding-inline: 2rem;
+  }
+}
+
+/* ---------- Binder ---------- */
+
+.binder {
+  position: relative;
+  --vinyl: #22365a;
+  --vinyl-deep: #172641;
+  --stitch: rgb(255 255 255 / 0.28);
+  --page: #131313;
+  --page-width: min(26rem, 100%);
+
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+}
+
+/* ---------- Cover ---------- */
+
+/* The front of the cover, filling the flipper that swings it */
+.binder-cover {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px 16px 16px 4px;
+  backface-visibility: hidden;
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.35), transparent 7%),
+    radial-gradient(
+      ellipse at 30% 20%,
+      rgb(255 255 255 / 0.12),
+      transparent 60%
+    ),
+    linear-gradient(160deg, var(--vinyl), var(--vinyl-deep));
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    0 1.5rem 3rem rgb(0 0 0 / 0.45);
+  cursor: pointer;
+}
+
+.binder-cover:disabled {
+  cursor: default;
+}
+
+.binder-cover:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 6px;
+}
+
+.binder-cover-face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  container-type: inline-size;
+}
+
+/* Stitching around the padded edge */
+.binder-cover-face::before {
+  content: "";
+  position: absolute;
+  inset: 4.5% 4.5% 4.5% 8%;
+  border: 2px dashed var(--stitch);
+  border-radius: 6px 12px 12px 6px;
+}
+
+.binder-label {
+  position: absolute;
+  top: 24%;
+  left: 18%;
+  right: 12%;
+  display: grid;
+  gap: 2cqw;
+  padding: 5cqw 6cqw;
+  border-radius: 3cqw;
+  background: var(--paper);
+  color: #1b1b1a;
+  box-shadow:
+    inset 0 -0.6cqw 0 rgb(0 0 0 / 0.12),
+    0 1cqw 2cqw rgb(0 0 0 / 0.3);
+  text-align: left;
+}
+
+.binder-title {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: var(--display-settings);
+  letter-spacing: var(--display-tracking);
+  font-size: 8.5cqw;
+  line-height: 1;
+}
+
+.binder-volume {
+  font-family: var(--font-label);
+  font-size: 3.6cqw;
+  color: rgb(27 27 26 / 0.6);
+}
+
+/* A round sticker counting what's been caught so far */
+.binder-sticker {
+  position: absolute;
+  top: 9%;
+  right: 11%;
+  display: grid;
+  place-content: center;
+  width: 19cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #f2c94c;
+  color: #2b2410;
+  box-shadow: 0 0.6cqw 1.2cqw rgb(0 0 0 / 0.35);
+  font-family: var(--font-label);
+  font-size: 2.9cqw;
+  line-height: 1.1;
+  text-align: center;
+  rotate: 12deg;
+}
+
+.binder-sticker b {
+  display: block;
+  font-size: 6.5cqw;
+}
+
+/* The clasp: a strap over the opening edge, fastened with a round button */
+.binder-clasp {
+  position: absolute;
+  top: 58%;
+  right: -3%;
+  width: 24cqw;
+  height: 15cqw;
+  border-radius: 4cqw 0 0 4cqw;
+  background: linear-gradient(var(--vinyl-deep), #0f1a2e);
+  box-shadow: 0 0.8cqw 1.6cqw rgb(0 0 0 / 0.4);
+}
+
+.binder-clasp::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 3cqw;
+  width: 11cqw;
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #fff 0 17%, #222 17% 27%, transparent 27%),
+    linear-gradient(#e2433b 0 45%, #222 45% 55%, #f4f1ea 55%);
+  box-shadow: 0 0 0 0.5cqw #222;
+}
+
+.binder-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8%;
+  font-family: var(--font-label);
+  font-size: 3.4cqw;
+  color: rgb(255 255 255 / 0.55);
+  text-align: center;
+}
+
+/* ---------- Open binder ---------- */
+
+.binder-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.binder-spread {
+  position: relative;
+  flex: 0 1 auto;
+  width: var(--page-width);
+  outline: none;
+  perspective: 2400px;
+}
+
+/* Wide: the spread spans the section, as wide as the sections above, and
+   the arrows sit out in the margins (tucking in if the margin is thin). */
+.binder[data-wide] .binder-stage {
+  position: relative;
+  display: block;
+}
+
+.binder[data-wide] .binder-spread {
+  width: 100%;
+}
+
+.binder[data-wide] .binder-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  translate: 0 -50%;
+}
+
+.binder[data-wide] .binder-arrow:first-child {
+  left: max(-4rem, (100% - 100vw) / 2 + 0.25rem);
+}
+
+.binder[data-wide] .binder-arrow:last-child {
+  right: max(-4rem, (100% - 100vw) / 2 + 0.25rem);
+}
+
+/* The open binder: the vinyl shows as a rim around the pages. Pockets are
+   spaced in cqw of this box; a page can't size its own gaps from itself. */
+.binder-pages {
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  gap: 5%;
+  padding: 3%;
+  border-radius: 12px;
+  background: linear-gradient(160deg, var(--vinyl), var(--vinyl-deep));
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.45);
+}
+
+.binder-pages[data-turn="next"] {
+  animation: pages-turn 0.3s ease-out;
+}
+
+.binder[data-wide] .binder-pages {
+  grid-template-columns: 1fr 1fr;
+  gap: 7%;
+  padding: 1.6%;
+}
+
+.binder[data-wide] .binder-page {
+  gap: 2.4cqw;
+}
+
+.binder-pages[data-turn="back"] {
+  animation: pages-turn-back 0.3s ease-out;
+}
+
+@keyframes pages-turn {
+  from {
+    opacity: 0;
+    translate: 2% 0;
+  }
+}
+
+@keyframes pages-turn-back {
+  from {
+    opacity: 0;
+    translate: -2% 0;
+  }
+}
+
+.binder-page {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3.5cqw;
+  padding: 6% 5%;
+  border-radius: 6px;
+  background: var(--page);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+/* A clear pocket: faintly visible plastic with a sheen across its face */
+.binder-pocket {
+  position: relative;
+  aspect-ratio: 63 / 88;
+  padding: 5%;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.035);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.binder-pocket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgb(255 255 255 / 0.09),
+    transparent 35%,
+    transparent 70%,
+    rgb(255 255 255 / 0.04)
+  );
+  pointer-events: none;
+}
+
+.binder-card {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transition: translate 0.15s;
+}
+
+.binder-card:hover {
+  translate: 0 -3%;
+}
+
+.binder-card:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 3px;
+  border-radius: 5%;
+}
+
+/* Three rings down the spine */
+.binder-rings {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 6%;
+  translate: -50% 0;
+  padding-block: 10%;
+}
+
+.binder-rings i {
+  height: 2.8%;
+  min-height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(#f2f2f2, #8d9297 55%, #c9cdd1);
+  box-shadow: 0 2px 3px rgb(0 0 0 / 0.5);
+}
+
+.binder-arrow {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgb(243 239 231 / 0.08);
+  color: var(--paper);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.binder-arrow:hover:not(:disabled) {
+  background: rgb(243 239 231 / 0.18);
+}
+
+.binder-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.binder-arrow svg {
+  width: 1.3rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.binder-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  color: rgb(243 239 231 / 0.65);
+}
+
+.binder-controls button {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgb(243 239 231 / 0.08);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.binder-controls button:hover {
+  background: rgb(243 239 231 / 0.18);
+}
+
+/* ---------- Opening ---------- */
+
+/* Shut, a wide binder is only its right half: the cover. The pages already
+   sit beneath in place, cut back to that half until the cover has swung
+   over and its inside has landed as the left half. */
+.binder[data-wide]:not([data-phase="open"]) .binder-base {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* The cover, hinged on the spine. Its front is the cover art; its back is
+   the inside of the binder, so as it swings over the left page arrives. */
+.binder-flipper {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.binder[data-wide] .binder-flipper {
+  left: 50%;
+}
+
+/* Hovered, it lifts a crack on the hinge */
+.binder[data-phase="closed"] .binder-flipper:hover {
+  transform: rotateY(-7deg);
+}
+
+.binder-flipper[data-motion="open"] {
+  animation: cover-open 1.15s cubic-bezier(0.55, 0.05, 0.3, 1) forwards;
+}
+
+.binder-flipper[data-motion="close"] {
+  animation: cover-open 0.95s cubic-bezier(0.55, 0.05, 0.3, 1) reverse forwards;
+}
+
+/* No start frame: it begins from wherever the cover is, lifted or flat */
+@keyframes cover-open {
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+/* One page wide, there's nowhere for it to land: it swings away like a door */
+.binder:not([data-wide]) .binder-flipper[data-motion] {
+  animation-name: cover-away;
+}
+
+@keyframes cover-away {
+  to {
+    transform: rotateY(-110deg);
+    opacity: 0;
+  }
+}
+
+.binder-cover-inside {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 12px 0 0 12px;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+
+/* The full spread, of which the inside of the cover shows the left half */
+.binder-cover-inside-pages {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.binder-controls {
+  animation: controls-in 0.3s ease-out;
+}
+
+@keyframes controls-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Card viewer ---------- */
+
+.card-viewer {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.card-viewer::backdrop {
+  background: rgb(0 0 0 / 0.75);
+}
+
+.card-viewer .pcard {
+  width: min(380px, 85vw, (100dvh - 9rem) * 63 / 88);
+}
+
+.card-viewer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+}
+
+.card-viewer-actions > * {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: rgb(243 239 231 / 0.1);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.card-viewer-actions > *:hover {
+  background: rgb(243 239 231 / 0.2);
+}
+
+.card-viewer-actions .card-viewer-play {
+  background: var(--paper);
+  color: #1b1b1a;
+  font-weight: 700;
+}
+
+.card-viewer-actions .card-viewer-play:hover {
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binder-pages,
+  .binder-flipper,
+  .binder-controls {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ---------- Card ---------- */
+
+/* Sized against its own width (cqw), so it reads the same at any size */
+.pcard {
+  --gold: #e3bd4f;
+
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 63 / 88;
+  overflow: hidden;
+  /* % here, not cqw: the card can't measure itself */
+  border-radius: 4.5% / 3.2%;
+  background: linear-gradient(150deg, #f3d36c, var(--gold) 40%, #c99a32);
+  box-shadow: 0 0.3em 1em rgb(0 0 0 / 0.45);
+  color: #1d1b16;
+  text-align: left;
+}
+
+.pcard-face {
+  position: absolute;
+  inset: 4.2cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqw;
+  padding: 2.4cqw 3.2cqw 2.2cqw;
+  border-radius: 2cqw;
+  background: linear-gradient(
+    170deg,
+    color-mix(in oklab, var(--type) 45%, #fbf6e8),
+    color-mix(in oklab, var(--type) 22%, #fbf6e8) 55%
+  );
+}
+
+/* A holo sweep on hover, or always for a card held up close */
+.pcard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.45) 45%,
+    rgb(160 220 255 / 0.3) 50%,
+    rgb(255 190 240 / 0.3) 55%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.3s,
+    background-position 0.7s ease-out;
+}
+
+.binder-card:hover .pcard::after,
+.card-viewer .pcard::after {
+  opacity: 0.6;
+  background-position: 0 0;
+}
+
+.pcard-top {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+}
+
+/* Long names take a second line rather than being cut short */
+.pcard-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 5.8cqw;
+  font-weight: 800;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.pcard-level {
+  font-family: var(--font-label);
+  font-size: 3cqw;
+}
+
+.pcard-level b {
+  font-size: 5cqw;
+}
+
+/* The type symbol: a coloured disc with the type's initials */
+.pcard-energy {
+  display: inline-grid;
+  place-items: center;
+  width: 6cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--type);
+  box-shadow:
+    inset 0 -0.5cqw 0 rgb(0 0 0 / 0.2),
+    0 0 0 0.4cqw rgb(255 255 255 / 0.6);
+  color: #1d1b16;
+  font-family: var(--font-label);
+  font-size: 2.5cqw;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pcard-art {
+  position: relative;
+  flex: none;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1cqw solid #d9c27d;
+  box-shadow:
+    inset 0 0 0 0.4cqw rgb(0 0 0 / 0.25),
+    0 0.6cqw 1cqw rgb(0 0 0 / 0.2);
+  background: #222;
+}
+
+.pcard-art img {
+  object-fit: cover;
+  object-position: top;
+}
+
+.pcard-info {
+  margin-top: -0.6cqw;
+  padding: 0.6cqw 2cqw;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #cfb35e, #ecd998, #cfb35e);
+  font-size: 2.7cqw;
+  font-style: italic;
+  text-align: center;
+}
+
+.pcard-description {
+  margin-top: 1cqw;
+  font-size: 3.9cqw;
+  line-height: 1.4;
+}
+
+/* Set like a card's flavour text */
+.pcard-status {
+  padding: 1cqw 2cqw;
+  border: 0.3cqw solid rgb(160 130 50 / 0.7);
+  border-radius: 1cqw;
+  font-size: 3cqw;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.pcard-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6cqw;
+  margin-top: auto;
+  list-style: none;
+}
+
+.pcard-links a,
+.pcard-links span {
+  display: inline-block;
+  padding: 0.8cqw 2.4cqw;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.78);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 2.9cqw;
+}
+
+.pcard-links a:hover {
+  background: #000;
+}
+
+.pcard-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.2cqw;
+  border-top: 0.3cqw solid rgb(0 0 0 / 0.25);
+  font-family: var(--font-label);
+  font-size: 2.2cqw;
+  color: rgb(0 0 0 / 0.65);
+}
+
+.pcard-links + .pcard-foot {
+  margin-top: 0;
+}

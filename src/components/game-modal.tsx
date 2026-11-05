@@ -5,11 +5,20 @@ import { useEffect, useRef } from "react";
 type GameModalProps = {
   title: string;
   src: string;
+  /** The build's native size; the frame keeps this shape as it shrinks. */
+  width?: number;
+  height?: number;
   onClose: () => void;
 };
 
 /** Plays a self-hosted game in an iframe over the page. */
-export function GameModal({ title, src, onClose }: GameModalProps) {
+export function GameModal({
+  title,
+  src,
+  width = 475,
+  height = 563,
+  onClose,
+}: GameModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   // No close() on cleanup: it fires `close`, which would call onClose and
@@ -32,13 +41,19 @@ export function GameModal({ title, src, onClose }: GameModalProps) {
       <div className="game-modal-frame">
         <header>
           <h2>{title}</h2>
-          <button type="button" aria-label="Close game" onClick={onClose}>
-            ×
-          </button>
+          <div className="game-modal-actions">
+            <a href={src} target="_blank" rel="noopener noreferrer">
+              Open in new tab
+            </a>
+            <button type="button" aria-label="Close game" onClick={onClose}>
+              ×
+            </button>
+          </div>
         </header>
         <iframe
           src={src}
           title={title}
+          style={{ width, aspectRatio: `${width} / ${height}` }}
           onLoad={(e) => {
             // Keys go to the game, not the page, once the frame has focus,
             // so listen inside it for Escape too.

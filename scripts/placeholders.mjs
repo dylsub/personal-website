@@ -50,6 +50,7 @@ const sources = [
     (n) => n.endsWith(".webp") && !n.includes("-backdrop"),
   )),
   ...(await files("videos", (n) => n.endsWith(".jpg"))),
+  ...(await files("projects", (n) => /^art\.(png|jpe?g|webp)$/.test(n))),
 ].sort();
 
 const map = Object.fromEntries(

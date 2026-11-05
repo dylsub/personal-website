@@ -35,6 +35,7 @@ body {
 .site-banner,
 .intro-heading,
 .games-intro-heading,
+.binder-heading,
 .caption-title {
   font-family: var(--font-display);
   font-weight: var(--display-weight);
@@ -729,11 +730,30 @@ body {
   background: var(--graphite);
 }
 
-/* The game draws a fixed 475×563 canvas (190×225 at 2.5× scale). */
+/* Sized by the component to the build's native canvas; it keeps that shape
+   as it shrinks to fit the screen. */
 .game-modal iframe {
   display: block;
-  width: 475px;
-  height: 563px;
+  height: auto;
   max-width: 100%;
+  max-height: calc(100dvh - 6rem);
   border: 0;
+}
+
+.game-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.game-modal-actions a {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgb(243 239 231 / 0.75);
+}
+
+.game-modal-actions a:hover {
+  background: var(--graphite);
+  color: var(--paper);
 }
