@@ -32,7 +32,7 @@ export const games: Game[] = [
     genre: "Platformer",
     platforms: ["Browser"],
     madeWith: "Unity",
-    note: "Won gold in the 2023 SkillsUSA State Competition",
+    note: "1st place, 2023 SkillsUSA State Competition",
     description: [
       "SMOG CITY is a 2D platformer inspired by Earth Week's initiative toward becoming a more eco-friendly society. The main player is a mysteriously hooded human that visits a dystopian city, possibly haunted by their past decisions.",
       "SMOG CITY includes multiple unique levels that increase in difficulty. Your goal is to get to the end of all the levels while picking up batteries and pollution along the way.",
@@ -54,7 +54,7 @@ export const games: Game[] = [
     genre: "Arcade",
     platforms: ["Browser"],
     madeWith: "Kaboom.js",
-    note: "Made for Kajam 2022",
+    note: "Honorable mention, Kajam 2022 ($10,000 prize pool)",
     description: [
       "Steer the bee with WASD or the arrow keys, grab powerups and chase a high score.",
     ],
@@ -73,6 +73,7 @@ export const games: Game[] = [
     genre: "Adventure",
     platforms: ["Browser", "Windows", "macOS", "Linux"],
     madeWith: "Unity",
+    note: "2nd place, 2022 SkillsUSA State Competition",
     description: [
       "PocaPola Island Adventure is a top-down adventure game with the ultimate goal of saving the environment. The game includes multiple unique characters and an interesting storyline that is completely up to the player to discover.",
       "This personal project was created with Unity Engine in 30 days.",
@@ -107,7 +108,7 @@ export const games: Game[] = [
     genre: "Platformer",
     platforms: ["Browser"],
     madeWith: "Unity",
-    note: "Made for Blackthornprod Game Jam #3",
+    note: "2nd place, 2021 SkillsUSA State Competition",
     description: [
       "Forbidden Growth is a short but sweet 2D platformer that focuses on quick reactions in order to survive.",
     ],
