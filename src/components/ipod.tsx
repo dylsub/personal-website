@@ -3,6 +3,7 @@
 import {
   useEffect,
   useRef,
+  useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import type { Dunk } from "@/content/dunks";
@@ -48,6 +49,17 @@ export function IPod({
   // doesn't also fire when it's released.
   const scrolledRef = useRef(false);
   const listRef = useRef<HTMLUListElement>(null);
+  // The visible window of the list, as fractions of its full height.
+  const [view, setView] = useState({ top: 0, size: 1 });
+
+  const measure = () => {
+    const list = listRef.current;
+    if (!list) return;
+    setView({
+      top: list.scrollTop / list.scrollHeight,
+      size: list.clientHeight / list.scrollHeight,
+    });
+  };
 
   // Keep the highlighted row on screen as the list grows past what fits.
   useEffect(() => {
@@ -55,9 +67,71 @@ export function IPod({
     const row = list?.children[cursor] as HTMLElement | undefined;
     if (!list || !row) return;
     if (row.offsetTop < list.scrollTop) list.scrollTop = row.offsetTop;
-    else if (row.offsetTop + row.offsetHeight > list.scrollTop + list.clientHeight)
+    else if (
+      row.offsetTop + row.offsetHeight >
+      list.scrollTop + list.clientHeight
+    )
       list.scrollTop = row.offsetTop + row.offsetHeight - list.clientHeight;
   }, [cursor]);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const observer = new ResizeObserver(() =>
+      setView({
+        top: list.scrollTop / list.scrollHeight,
+        size: list.clientHeight / list.scrollHeight,
+      }),
+    );
+    observer.observe(list);
+    // The mouse wheel scrolls the list, and hands back to the page once the
+    // list can't go any further that way.
+    const wheel = (event: WheelEvent) => {
+      const max = list.scrollHeight - list.clientHeight;
+      const atEnd =
+        event.deltaY < 0 ? list.scrollTop <= 0 : list.scrollTop >= max - 1;
+      if (max <= 0 || atEnd) return;
+      event.preventDefault();
+      list.scrollTop += event.deltaY;
+    };
+    const browser = list.parentElement!;
+    browser.addEventListener("wheel", wheel, { passive: false });
+    return () => {
+      observer.disconnect();
+      browser.removeEventListener("wheel", wheel);
+    };
+  }, []);
+
+  // Dragging the thumb keeps hold of the spot it was grabbed by; pressing the
+  // track centres the thumb there first, then drags from the middle.
+  const dragScrollbar = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const list = listRef.current;
+    const track = event.currentTarget;
+    const thumb = track.firstElementChild as HTMLElement;
+    if (!list || event.button !== 0) return;
+    event.preventDefault();
+    const rect = track.getBoundingClientRect();
+    const grab =
+      event.target === thumb
+        ? event.clientY - thumb.getBoundingClientRect().top
+        : thumb.offsetHeight / 2;
+    const scrollTo = (y: number) => {
+      list.scrollTop =
+        ((y - rect.top - grab) / rect.height) * list.scrollHeight;
+    };
+    scrollTo(event.clientY);
+
+    track.setPointerCapture(event.pointerId);
+    const move = (e: PointerEvent) => scrollTo(e.clientY);
+    const up = () => {
+      track.removeEventListener("pointermove", move);
+      track.removeEventListener("pointerup", up);
+      track.removeEventListener("pointercancel", up);
+    };
+    track.addEventListener("pointermove", move);
+    track.addEventListener("pointerup", up);
+    track.addEventListener("pointercancel", up);
+  };
 
   const angleFrom = (x: number, y: number) => {
     const rect = wheelRef.current!.getBoundingClientRect();
@@ -122,26 +196,47 @@ export function IPod({
             </span>
           </div>
 
-          <ul ref={listRef} className="lcd-list" aria-label="Dunks">
-            {dunks.map((dunk, index) => (
-              <li key={dunk.id}>
-                <button
-                  type="button"
-                  className="lcd-row"
-                  data-highlighted={index === cursor || undefined}
-                  aria-current={index === active || undefined}
-                  onClick={() => onSelect(index)}
-                >
-                  <span className="truncate">{dunk.title}</span>
-                  {index === active && (
-                    <span className="lcd-glyph">
-                      <PixelPlay />
-                    </span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="lcd-browser">
+            <ul
+              ref={listRef}
+              className="lcd-list"
+              aria-label="Dunks"
+              onScroll={measure}
+            >
+              {dunks.map((dunk, index) => (
+                <li key={dunk.id}>
+                  <button
+                    type="button"
+                    className="lcd-row"
+                    data-highlighted={index === cursor || undefined}
+                    aria-current={index === active || undefined}
+                    onClick={() => onSelect(index)}
+                  >
+                    <span className="truncate">{dunk.title}</span>
+                    {index === active && (
+                      <span className="lcd-glyph">
+                        <PixelPlay />
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {view.size < 1 && (
+              <div
+                className="lcd-scrollbar"
+                aria-hidden
+                onPointerDown={dragScrollbar}
+              >
+                <div
+                  style={{
+                    top: `${view.top * 100}%`,
+                    height: `${view.size * 100}%`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
 
           <div className="lcd-footer" aria-hidden>
             <div className="lcd-progress">
@@ -156,11 +251,7 @@ export function IPod({
       </div>
 
       <div className="ipod-lower">
-        <div
-          ref={wheelRef}
-          className="wheel"
-          onPointerDown={handlePointerDown}
-        >
+        <div ref={wheelRef} className="wheel" onPointerDown={handlePointerDown}>
           <button
             type="button"
             className="wheel-btn wheel-top"

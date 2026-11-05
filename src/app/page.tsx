@@ -30,7 +30,18 @@ export default function Home() {
       <section className="reel">
         <div className="intro-lead">
           <h1 className="intro-heading">{intro.heading}</h1>
-          <p className="intro-goal">{intro.goal}</p>
+          <dl className="intro-stats">
+            {intro.stats.map((stat) => (
+              <div key={stat.label}>
+                <dt>{stat.label}</dt>
+                <dd>{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="intro-goal">
+            <span className="intro-goal-label">{intro.goal.label}</span>
+            {intro.goal.text}
+          </p>
         </div>
         <div className="intro-body">
           {intro.body.map((paragraph) => (

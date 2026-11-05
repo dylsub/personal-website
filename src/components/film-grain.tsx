@@ -67,11 +67,18 @@ export function FilmGrain({
     const observer = new ResizeObserver(build);
     observer.observe(canvas);
     build();
-    if (!reduceMotion) raf = requestAnimationFrame(tick);
+
+    // Animate only while some of the canvas is on screen.
+    const visibility = new IntersectionObserver(([entry]) => {
+      cancelAnimationFrame(raf);
+      if (entry.isIntersecting && !reduceMotion) raf = requestAnimationFrame(tick);
+    });
+    visibility.observe(canvas);
 
     return () => {
       cancelAnimationFrame(raf);
       observer.disconnect();
+      visibility.disconnect();
     };
   }, []);
 

@@ -15,6 +15,10 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 
 export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  // Off-screen, the clip pauses to save decoding work. A pause the viewer
+  // chose sticks; only one we made is undone when the clip scrolls back in.
+  const inViewRef = useRef(true);
+  const userPausedRef = useRef(false);
   const [active, setActive] = useState(0);
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -32,7 +36,19 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   }, [burst]);
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
+    const video = videoRef.current;
+    if (!video) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      inViewRef.current = entry.isIntersecting;
+      if (!entry.isIntersecting) video.pause();
+      else if (!userPausedRef.current) video.play().catch(() => {});
+    });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (inViewRef.current) videoRef.current?.play().catch(() => {});
   }, [active]);
 
   useEffect(() => {
@@ -43,10 +59,11 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
     const video = videoRef.current;
     if (!video) return;
     video.currentTime = 0;
-    video.play().catch(() => {});
+    if (inViewRef.current) video.play().catch(() => {});
   };
 
   const playDunk = (index: number) => {
+    userPausedRef.current = false;
     setCursor(index);
     setBurst(true);
     if (index === active) restart();
@@ -56,6 +73,7 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
+    userPausedRef.current = !video.paused;
     if (video.paused) video.play().catch(() => {});
     else video.pause();
   };
@@ -76,7 +94,6 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
           style={{ objectPosition: dunk.position ?? "center" }}
           src={dunk.src}
           poster={dunk.poster}
-          autoPlay
           muted
           loop
           playsInline
