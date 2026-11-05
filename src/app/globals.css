@@ -79,9 +79,8 @@ main {
 .site-banner {
   max-width: 72rem;
   margin: 0 auto;
-  padding: clamp(2rem, 8vh, 5rem) 1rem 0;
-  /* Sized so the wide headline face holds the banner to one line on desktop */
-  font-size: clamp(2.25rem, 5.6vw, 4.4rem);
+  padding: clamp(2rem, 8vh, 5rem) 1rem clamp(1.5rem, 6vh, 3.5rem);
+  font-size: clamp(1.75rem, 3.8vw, 2.9rem);
   line-height: 1;
 }
 
