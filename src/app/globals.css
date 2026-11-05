@@ -32,6 +32,11 @@ body {
   font-family: var(--font-body);
 }
 
+/* The 3DS's canvas overhangs its column; it never widens the page */
+main {
+  overflow-x: clip;
+}
+
 .site-banner,
 .intro-heading,
 .games-intro-heading,
@@ -104,6 +109,112 @@ body {
 @media (min-width: 64rem) {
   .site-banner {
     padding-inline: 2rem;
+  }
+}
+
+/* ---------- About ---------- */
+
+/* Words on the left, the 3DS on the right */
+.about {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 7vh, 4.5rem) 1rem clamp(3rem, 9vh, 5.5rem);
+}
+
+.about-heading {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: var(--display-settings);
+  letter-spacing: var(--display-tracking);
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  line-height: 1.05;
+}
+
+.about-body {
+  max-width: 32rem;
+  margin-top: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgb(243 239 231 / 0.75);
+}
+
+.about-body:first-of-type {
+  color: var(--paper);
+}
+
+/* A stat sheet, like the dunking section's */
+.about-facts {
+  display: flex;
+  flex-wrap: wrap;
+  width: fit-content;
+  margin-top: 1.75rem;
+  border-block: 1px solid rgb(243 239 231 / 0.35);
+}
+
+.about-facts > div {
+  padding: 0.45rem 1.6rem 0.5rem 0;
+}
+
+.about-facts > div + div {
+  padding-left: 1.6rem;
+  border-left: 1px solid rgb(243 239 231 / 0.35);
+}
+
+.about-facts dt {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: rgb(243 239 231 / 0.6);
+}
+
+.about-facts dd {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: var(--display-settings);
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.about-facts a:hover {
+  color: #f2c94c;
+}
+
+/* Tighter on a phone, so all three facts share one row */
+@media (max-width: 30rem) {
+  .about-facts {
+    flex-wrap: nowrap;
+  }
+
+  .about-facts > div {
+    padding-right: 0.9rem;
+  }
+
+  .about-facts > div + div {
+    padding-left: 0.9rem;
+  }
+
+  .about-facts dd {
+    font-size: 1.2rem;
+  }
+}
+
+.about .ds-viewer {
+  width: 100%;
+  max-width: 34rem;
+  justify-self: center;
+}
+
+@media (min-width: 64rem) {
+  .about {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: 4rem;
+    padding-inline: 2rem;
+  }
+
+  .about .ds-viewer {
+    justify-self: end;
   }
 }
 

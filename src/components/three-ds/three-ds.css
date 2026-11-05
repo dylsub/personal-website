@@ -1,0 +1,556 @@
+/* ---------- Scene ---------- */
+
+/* Sizes inside are cqw of the console's width, so it scales as one */
+.ds-scene {
+  --shell: #37a8cd;
+  --shell-light: #8ad7ef;
+  --shell-deep: #1b6f93;
+  --inner: #101418;
+  --inner-light: #262c33;
+  --button: #2b3036;
+
+  position: relative;
+  width: 100%;
+  margin: 0;
+  /* Room either side for the base, which flares wider as it nears */
+  padding-inline: 9%;
+}
+
+/* The camera looks on from in front and a little above */
+.ds {
+  container-type: inline-size;
+  position: relative;
+  z-index: 1;
+  perspective: 340cqw;
+  perspective-origin: 50% 10%;
+}
+
+/* ---------- Lid ---------- */
+
+/* Leans back on the hinge, a little past upright */
+.ds-lid {
+  height: 56cqw;
+  padding: 1.8cqw;
+  border-radius: 5cqw 5cqw 2cqw 2cqw;
+  background: linear-gradient(
+    175deg,
+    var(--shell-light),
+    var(--shell) 30%,
+    var(--shell-deep)
+  );
+  box-shadow:
+    inset 0 0.5cqw 0.6cqw rgb(255 255 255 / 0.45),
+    inset 0 -0.6cqw 1cqw rgb(0 0 0 / 0.25);
+  transform: rotateX(13deg);
+  transform-origin: 50% 100%;
+}
+
+.ds-lid-face {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 3.6cqw 3.6cqw 1cqw 1cqw;
+  background: linear-gradient(170deg, var(--inner-light), var(--inner) 45%);
+}
+
+/* A sheen across the glossy black, catching the light from above */
+.ds-lid-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgb(255 255 255 / 0.1),
+    rgb(255 255 255 / 0.02) 35%,
+    transparent 36%
+  );
+  pointer-events: none;
+}
+
+.ds-top-screen {
+  position: absolute;
+  top: 7cqw;
+  left: 50%;
+  width: 57cqw;
+  aspect-ratio: 5 / 3;
+  translate: -50% 0;
+  overflow: hidden;
+  border: 0.9cqw solid #000;
+  border-radius: 0.6cqw;
+  background: #000;
+  box-shadow: 0 0 0 0.25cqw rgb(255 255 255 / 0.06);
+}
+
+.ds-top-screen img {
+  object-fit: cover;
+}
+
+/* The glass over the screen */
+.ds-top-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgb(255 255 255 / 0.14), transparent 30%);
+  pointer-events: none;
+}
+
+/* Rows of speaker holes either side of the screen */
+.ds-speaker {
+  position: absolute;
+  top: 17cqw;
+  width: 5.4cqw;
+  height: 13cqw;
+  background: radial-gradient(circle, #05070a 0 0.42cqw, transparent 0.5cqw) 0
+    0 / 1.8cqw 1.8cqw;
+}
+
+.ds-speaker-left {
+  left: 7.5cqw;
+}
+
+.ds-speaker-right {
+  right: 7.5cqw;
+}
+
+.ds-camera {
+  position: absolute;
+  top: 2.6cqw;
+  left: 50%;
+  width: 1.9cqw;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #6a7c96 0 15%,
+    #0b1220 35%,
+    #000 70%
+  );
+  box-shadow: 0 0 0 0.35cqw #1c2228;
+}
+
+/* The 3D depth slider, down the right of the screen */
+.ds-slider {
+  position: absolute;
+  top: 8cqw;
+  left: 81.2cqw;
+  width: 1.3cqw;
+  height: 11cqw;
+  border-radius: 1cqw;
+  background: #05070a;
+  box-shadow: inset 0 0 0 0.2cqw #2a3038;
+}
+
+.ds-slider i {
+  position: absolute;
+  top: 1cqw;
+  left: -0.25cqw;
+  width: 1.8cqw;
+  height: 2.6cqw;
+  border-radius: 0.4cqw;
+  background: linear-gradient(90deg, #bfc6cd, #7d868f);
+}
+
+.ds-slider-label {
+  position: absolute;
+  top: 20cqw;
+  left: 80.6cqw;
+  font-family: var(--font-label);
+  font-size: 1.5cqw;
+  color: #5f6a75;
+}
+
+/* ---------- Top screen: a camera app ---------- */
+
+.ds-cam-ui {
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-label);
+  color: #fff;
+  text-shadow: 0 0.15cqw 0.3cqw rgb(0 0 0 / 0.7);
+}
+
+.ds-cam-count {
+  position: absolute;
+  top: 1.4cqw;
+  left: 1.8cqw;
+  font-size: 1.9cqw;
+  letter-spacing: 0.05em;
+}
+
+.ds-cam-battery {
+  position: absolute;
+  top: 1.5cqw;
+  right: 1.8cqw;
+  display: flex;
+  gap: 0.3cqw;
+  padding: 0.35cqw;
+  border: 0.2cqw solid #fff;
+  border-radius: 0.3cqw;
+  box-shadow: 0 0.15cqw 0.3cqw rgb(0 0 0 / 0.5);
+}
+
+.ds-cam-battery i {
+  width: 0.7cqw;
+  height: 1.1cqw;
+  background: #fff;
+}
+
+/* Corner brackets of the viewfinder */
+.ds-cam-frame {
+  position: absolute;
+  inset: 18% 14%;
+  --c: rgb(255 255 255 / 0.85);
+  --l: 3.2cqw;
+  --w: 0.25cqw;
+  background:
+    linear-gradient(var(--c) 0 0) 0 0 / var(--l) var(--w),
+    linear-gradient(var(--c) 0 0) 0 0 / var(--w) var(--l),
+    linear-gradient(var(--c) 0 0) 100% 0 / var(--l) var(--w),
+    linear-gradient(var(--c) 0 0) 100% 0 / var(--w) var(--l),
+    linear-gradient(var(--c) 0 0) 0 100% / var(--l) var(--w),
+    linear-gradient(var(--c) 0 0) 0 100% / var(--w) var(--l),
+    linear-gradient(var(--c) 0 0) 100% 100% / var(--l) var(--w),
+    linear-gradient(var(--c) 0 0) 100% 100% / var(--w) var(--l);
+  background-repeat: no-repeat;
+  opacity: 0.8;
+}
+
+/* The date burned in, in orange, like an old digital camera */
+.ds-cam-stamp {
+  position: absolute;
+  right: 2cqw;
+  bottom: 1.4cqw;
+  font-size: 2.3cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffa03a;
+  text-shadow:
+    0 0 0.6cqw rgb(255 140 40 / 0.8),
+    0 0.15cqw 0.3cqw rgb(0 0 0 / 0.6);
+}
+
+/* ---------- Hinge ---------- */
+
+.ds-hinge {
+  position: relative;
+  z-index: 1;
+  width: 94cqw;
+  height: 4.2cqw;
+  margin: -0.6cqw auto;
+  border-radius: 2.2cqw;
+  background: linear-gradient(
+    var(--shell-deep),
+    var(--shell-light) 45%,
+    var(--shell) 60%,
+    var(--shell-deep)
+  );
+  box-shadow: 0 0.6cqw 1cqw rgb(0 0 0 / 0.35);
+}
+
+.ds-led {
+  position: absolute;
+  top: 50%;
+  width: 0.9cqw;
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: #1a3442;
+}
+
+.ds-led-power {
+  right: 10cqw;
+  background: #8fdcff;
+  box-shadow: 0 0 1cqw #5bc8ff;
+}
+
+.ds-led-charge {
+  right: 13cqw;
+}
+
+/* ---------- Base ---------- */
+
+/* Lies back toward the viewer, as if on a table. It keeps its full height
+   in the layout, so the space it no longer fills is given back below. */
+.ds-base {
+  height: 56cqw;
+  margin-bottom: -27cqw;
+  padding: 1.8cqw;
+  border-radius: 2cqw 2cqw 5cqw 5cqw;
+  background: linear-gradient(180deg, var(--shell), var(--shell-deep) 85%);
+  box-shadow:
+    inset 0 0.5cqw 0.6cqw rgb(255 255 255 / 0.3),
+    inset 0 -0.8cqw 1.2cqw rgb(0 0 0 / 0.3),
+    /* Its front edge: the half's thickness, facing the viewer */ 0 2.2cqw 0
+      #12577a,
+    0 2.6cqw 0.6cqw rgb(0 0 0 / 0.4);
+  transform: rotateX(62deg);
+  transform-origin: 50% 0;
+}
+
+.ds-base-face {
+  position: relative;
+  height: 100%;
+  border-radius: 1cqw 1cqw 3.6cqw 3.6cqw;
+  background: linear-gradient(180deg, var(--inner), var(--inner-light));
+}
+
+.ds-bottom-screen {
+  position: absolute;
+  top: 3.5cqw;
+  left: 50%;
+  width: 44cqw;
+  aspect-ratio: 4 / 3;
+  translate: -50% 0;
+  overflow: hidden;
+  border: 0.9cqw solid #000;
+  border-radius: 0.5cqw;
+  background: linear-gradient(#f2f5f8, #d9e1e8);
+  font-family: var(--font-rounded);
+  color: #4b5560;
+}
+
+.ds-app-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1cqw 0;
+  background: linear-gradient(#ffffff, #e4eaef);
+  border-bottom: 0.2cqw solid #c5ced6;
+  font-size: 2.6cqw;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* The shutter: a big round button in the middle */
+.ds-app-shutter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13cqw;
+  aspect-ratio: 1;
+  translate: -50% -42%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #ff8a6b, #e2452a 70%);
+  box-shadow:
+    0 0 0 1cqw #fff,
+    0 0 0 1.25cqw #c5ced6,
+    0 0.8cqw 1.4cqw rgb(0 0 0 / 0.25);
+}
+
+.ds-app-button {
+  position: absolute;
+  bottom: 2cqw;
+  padding: 0.9cqw 2cqw;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 0.25cqw #c5ced6,
+    0 0.4cqw 0.8cqw rgb(0 0 0 / 0.15);
+  font-size: 2.2cqw;
+  font-weight: 800;
+}
+
+.ds-app-left {
+  left: 2cqw;
+}
+
+.ds-app-right {
+  right: 2cqw;
+}
+
+/* Circle pad: a concave disc in a ring */
+.ds-circle-pad {
+  position: absolute;
+  top: 5cqw;
+  left: 6.5cqw;
+  width: 13cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #05070a;
+  box-shadow: inset 0 0 0 0.4cqw #2c333b;
+}
+
+.ds-circle-pad i {
+  position: absolute;
+  inset: 1.8cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%, #5a636d, #2a3037 70%);
+  box-shadow:
+    0 0.5cqw 0.8cqw rgb(0 0 0 / 0.5),
+    inset 0 0.3cqw 0.4cqw rgb(255 255 255 / 0.15);
+}
+
+/* D-pad: two crossed bars */
+.ds-dpad {
+  position: absolute;
+  top: 26cqw;
+  left: 8.5cqw;
+  width: 9cqw;
+  aspect-ratio: 1;
+}
+
+.ds-dpad i {
+  position: absolute;
+  inset: 0 33%;
+  border-radius: 0.6cqw;
+  background: linear-gradient(90deg, #3a4148, var(--button));
+  box-shadow: 0 0.4cqw 0.6cqw rgb(0 0 0 / 0.5);
+}
+
+.ds-dpad i + i {
+  inset: 33% 0;
+}
+
+/* A, B, X, Y in a diamond */
+.ds-abxy {
+  position: absolute;
+  top: 7cqw;
+  right: 6cqw;
+  width: 15cqw;
+  aspect-ratio: 1;
+}
+
+.ds-abxy i {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 4.8cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 35%, #4a525b, var(--button) 70%);
+  box-shadow: 0 0.4cqw 0.6cqw rgb(0 0 0 / 0.5);
+  font-family: var(--font-rounded);
+  font-size: 2cqw;
+  font-style: normal;
+  font-weight: 800;
+  color: #8e98a3;
+}
+
+.ds-abxy i:nth-child(1) {
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.ds-abxy i:nth-child(2) {
+  top: 50%;
+  left: 0;
+  translate: 0 -50%;
+}
+
+.ds-abxy i:nth-child(3) {
+  top: 50%;
+  right: 0;
+  translate: 0 -50%;
+}
+
+.ds-abxy i:nth-child(4) {
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+/* SELECT, HOME and START, in a strip under the screen */
+.ds-menu {
+  position: absolute;
+  bottom: 3.6cqw;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 3cqw;
+  translate: -50% 0;
+}
+
+.ds-menu i {
+  width: 5cqw;
+  height: 1.6cqw;
+  border-radius: 999px;
+  background: linear-gradient(#3d444c, #1e2328);
+  box-shadow: 0 0.3cqw 0.4cqw rgb(0 0 0 / 0.5);
+}
+
+.ds-menu i:nth-child(2) {
+  width: 2.6cqw;
+  height: 2.6cqw;
+  border-radius: 50%;
+}
+
+.ds-power {
+  position: absolute;
+  right: 9cqw;
+  bottom: 4cqw;
+  width: 3cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 35%, #4a525b, var(--button) 70%);
+  box-shadow: 0 0.3cqw 0.5cqw rgb(0 0 0 / 0.5);
+}
+
+/* ---------- Shadow ---------- */
+
+.ds-shadow {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: -6cqw;
+  height: 16cqw;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), transparent);
+}
+
+/* ---------- 3D model ---------- */
+
+/* The model's canvas lies over the drawing, filling the same space, and
+   fades in once built; the drawing then fades out beneath it. */
+.ds-viewer {
+  position: relative;
+}
+
+.ds-canvas {
+  position: absolute;
+  inset: -12% -6% -14%;
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+  cursor: grab;
+}
+
+.ds-canvas:active {
+  cursor: grabbing;
+}
+
+/* Sized and placed by the scene, overhanging the box all round */
+.ds-canvas canvas {
+  position: absolute;
+  display: block;
+  max-width: none;
+  pointer-events: none;
+}
+
+.ds-viewer[data-ready] .ds-canvas {
+  opacity: 1;
+}
+
+.ds-viewer .ds-scene {
+  transition: opacity 0.6s ease-out;
+}
+
+.ds-viewer[data-ready] .ds-scene {
+  opacity: 0;
+}
+
+.ds-hint {
+  position: absolute;
+  left: 50%;
+  bottom: -2.5rem;
+  translate: -50% 0;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: rgb(243 239 231 / 0.45);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.ds-viewer[data-ready] .ds-hint {
+  opacity: 1;
+}

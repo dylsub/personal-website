@@ -1,7 +1,9 @@
 import { Binder } from "@/components/binder/binder";
 import { DunkPlayer } from "@/components/dunk-player";
+import { ThreeDSViewer } from "@/components/three-ds/three-ds-viewer";
 import { GamesIntro } from "@/components/games-intro";
 import { WiiSection } from "@/components/wii/wii-section";
+import { about } from "@/content/about";
 import { dunks } from "@/content/dunks";
 import { games } from "@/content/games";
 import { intro } from "@/content/intro";
@@ -54,6 +56,18 @@ export default function Home() {
         </h1>
         <p>todo... more coming soon</p>
       </header>
+      <section className="about" aria-labelledby="about-heading">
+        <div className="about-text">
+          <h2 id="about-heading" className="about-heading">
+            {about.heading}
+          </h2>
+        </div>
+        <ThreeDSViewer
+          photo={about.photo.src}
+          alt={about.photo.alt}
+          stamp="'25 11 05"
+        />
+      </section>
       <GamesIntro />
       <WiiSection games={games} />
       <section className="binder-section" aria-labelledby="projects-heading">
