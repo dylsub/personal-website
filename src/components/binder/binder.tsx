@@ -84,9 +84,10 @@ export function Binder({
     setView(next);
   };
 
-  // Once open, move focus into the pages so the arrow keys work at once.
+  // Once open, move focus into the pages so the arrow keys work at once,
+  // without scrolling to them: the reader may have scrolled on meanwhile.
   useEffect(() => {
-    if (phase === "open") spreadRef.current?.focus();
+    if (phase === "open") spreadRef.current?.focus({ preventScroll: true });
   }, [phase]);
 
   // The spread's pages. Also drawn on the inside of the cover as it swings,
