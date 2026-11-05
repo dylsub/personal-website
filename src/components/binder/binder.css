@@ -290,14 +290,15 @@
   animation: pages-turn 0.3s ease-out;
 }
 
+/* Margins kept tight so the cards get as much of the spread as possible */
 .binder[data-wide] .binder-pages {
   grid-template-columns: 1fr 1fr;
-  gap: 7%;
-  padding: 1.6%;
+  gap: 2.6%;
+  padding: 0.6%;
 }
 
 .binder[data-wide] .binder-page {
-  gap: 2.4cqw;
+  gap: 1cqw;
 }
 
 .binder-pages[data-turn="back"] {
@@ -321,8 +322,8 @@
 .binder-page {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 3.5cqw;
-  padding: 6% 5%;
+  gap: 2.5cqw;
+  padding: 1.8%;
   border-radius: 6px;
   background: var(--page);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
@@ -332,7 +333,7 @@
 .binder-pocket {
   position: relative;
   aspect-ratio: 63 / 88;
-  padding: 5%;
+  padding: 1.8%;
   border-radius: 4px;
   background: rgb(255 255 255 / 0.035);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
@@ -354,15 +355,47 @@
 }
 
 .binder-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
   cursor: pointer;
-  transition: translate 0.15s;
+  perspective: 900px;
 }
 
-.binder-card:hover {
-  translate: 0 -3%;
+.binder-card .pcard {
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s;
+}
+
+/* Pointed at, a card lifts out of its sleeve over its neighbours, large
+   enough to read, and tilts toward the pointer. */
+@media (hover: hover) {
+  .binder-pocket:has(.binder-card:hover) {
+    z-index: 3;
+  }
+
+  /* Above its own sleeve's sheen, as if pulled out of the pocket */
+  .binder-card:hover {
+    z-index: 2;
+  }
+
+  .binder-card:hover .pcard {
+    transform: scale(1.25) rotateX(var(--rx)) rotateY(var(--ry));
+    box-shadow: 0 1.5em 3em rgb(0 0 0 / 0.55);
+    transition-duration: 0.25s, 0.25s;
+  }
+
+  /* Once lifted, the tilt follows the pointer closely */
+  .binder-card[data-tracking]:hover .pcard {
+    transition-duration: 0.08s, 0.25s;
+  }
 }
 
 .binder-card:focus-visible {
@@ -380,7 +413,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 6%;
+  width: 3.6%;
+  z-index: 1;
   translate: -50% 0;
   padding-block: 10%;
 }
@@ -519,14 +553,19 @@
   height: 100%;
 }
 
+/* The arrows and controls hold their space even while shut, so opening
+   doesn't push the rest of the page down; they just fade in. */
+.binder-arrow,
 .binder-controls {
-  animation: controls-in 0.3s ease-out;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s,
+    background 0.15s;
 }
 
-@keyframes controls-in {
-  from {
-    opacity: 0;
-  }
+.binder:not([data-phase="open"]) :is(.binder-arrow, .binder-controls) {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ---------- Card viewer ---------- */
@@ -583,6 +622,7 @@
 @media (prefers-reduced-motion: reduce) {
   .binder-pages,
   .binder-flipper,
+  .binder-arrow,
   .binder-controls {
     animation: none;
     transition: none;
@@ -592,8 +632,17 @@
 /* ---------- Card ---------- */
 
 /* Sized against its own width (cqw), so it reads the same at any size */
+/* Coloured per card from its art (see project-card.tsx); these are the
+   gold fallbacks */
 .pcard {
-  --gold: #e3bd4f;
+  --frame: #e3bd4f;
+  --frame-deep: #c99a32;
+  --frame-light: #f3d36c;
+  --face: #fbf6e8;
+  --face-deep: #f3e5b8;
+  --ink: #1d1b16;
+  --strip: #ecd998;
+  --strip-ink: #1d1b16;
 
   container-type: inline-size;
   position: relative;
@@ -602,9 +651,14 @@
   overflow: hidden;
   /* % here, not cqw: the card can't measure itself */
   border-radius: 4.5% / 3.2%;
-  background: linear-gradient(150deg, #f3d36c, var(--gold) 40%, #c99a32);
+  background: linear-gradient(
+    150deg,
+    var(--frame-light),
+    var(--frame) 40%,
+    var(--frame-deep)
+  );
   box-shadow: 0 0.3em 1em rgb(0 0 0 / 0.45);
-  color: #1d1b16;
+  color: var(--ink);
   text-align: left;
 }
 
@@ -616,11 +670,7 @@
   gap: 1.2cqw;
   padding: 2.4cqw 3.2cqw 2.2cqw;
   border-radius: 2cqw;
-  background: linear-gradient(
-    170deg,
-    color-mix(in oklab, var(--type) 45%, #fbf6e8),
-    color-mix(in oklab, var(--type) 22%, #fbf6e8) 55%
-  );
+  background: linear-gradient(170deg, var(--face-deep), var(--face) 55%);
 }
 
 /* A holo sweep on hover, or always for a card held up close */
@@ -645,10 +695,21 @@
     background-position 0.7s ease-out;
 }
 
-.binder-card:hover .pcard::after,
 .card-viewer .pcard::after {
   opacity: 0.6;
   background-position: 0 0;
+}
+
+@media (hover: hover) {
+  .binder-card:hover .pcard::after {
+    opacity: 1;
+    background: radial-gradient(
+      circle at var(--mx) var(--my),
+      rgb(255 255 255 / 0.18),
+      rgb(190 220 255 / 0.06) 30%,
+      transparent 60%
+    );
+  }
 }
 
 .pcard-top {
@@ -699,7 +760,7 @@
   flex: none;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border: 1cqw solid #d9c27d;
+  border: 1cqw solid var(--frame);
   box-shadow:
     inset 0 0 0 0.4cqw rgb(0 0 0 / 0.25),
     0 0.6cqw 1cqw rgb(0 0 0 / 0.2);
@@ -715,22 +776,23 @@
   margin-top: -0.6cqw;
   padding: 0.6cqw 2cqw;
   border-radius: 999px;
-  background: linear-gradient(90deg, #cfb35e, #ecd998, #cfb35e);
-  font-size: 2.7cqw;
-  font-style: italic;
+  background: var(--strip);
+  color: var(--strip-ink);
+  font-size: 3.7cqw;
+  font-weight: 650;
   text-align: center;
 }
 
 .pcard-description {
   margin-top: 1cqw;
-  font-size: 3.9cqw;
-  line-height: 1.4;
+  font-size: 5.1cqw;
+  line-height: 1.35;
 }
 
 /* Set like a card's flavour text */
 .pcard-status {
   padding: 1cqw 2cqw;
-  border: 0.3cqw solid rgb(160 130 50 / 0.7);
+  border: 0.3cqw solid var(--frame);
   border-radius: 1cqw;
   font-size: 3cqw;
   font-style: italic;
@@ -765,10 +827,10 @@
   justify-content: space-between;
   margin-top: auto;
   padding-top: 1.2cqw;
-  border-top: 0.3cqw solid rgb(0 0 0 / 0.25);
+  border-top: 0.3cqw solid currentColor;
   font-family: var(--font-label);
   font-size: 2.2cqw;
-  color: rgb(0 0 0 / 0.65);
+  opacity: 0.75;
 }
 
 .pcard-links + .pcard-foot {

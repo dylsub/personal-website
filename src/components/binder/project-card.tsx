@@ -1,6 +1,9 @@
 import type { CSSProperties } from "react";
 import { BlurImage } from "@/components/blur-image";
+import cardColors from "@/content/card-colors.json";
 import { TYPES, type Project } from "@/content/projects";
+
+type CardColors = Record<string, Record<string, string | number>>;
 
 const pad = (n: number) => String(n).padStart(3, "0");
 
@@ -27,17 +30,29 @@ export function ProjectCard({
   live?: boolean;
 }) {
   const type = TYPES[project.type];
+  // Coloured after its art (scripts/card-colors.mjs); gold if it has none.
+  const c = (cardColors as CardColors)[project.art];
+  const colors = c && {
+    "--frame": c.frame,
+    "--frame-deep": c.frameDeep,
+    "--frame-light": c.frameLight,
+    "--face": c.face,
+    "--face-deep": c.faceDeep,
+    "--ink": c.ink,
+    "--strip": c.strip,
+    "--strip-ink": c.stripInk,
+  };
   return (
     <article
       className="pcard"
-      style={{ "--type": type.color } as CSSProperties}
+      style={{ "--type": type.color, ...colors } as CSSProperties}
       aria-label={`${project.title}, ${project.year}`}
     >
       <div className="pcard-face">
         <header className="pcard-top">
           <h3 className="pcard-name">{project.title}</h3>
           <span className="pcard-level">
-            Lv.<b>{String(project.year).slice(2)}</b>
+            Lv.<b>{project.level}</b>
           </span>
           <span className="pcard-energy" title={type.label}>
             {type.short}
@@ -70,7 +85,7 @@ export function ProjectCard({
         )}
 
         <footer className="pcard-foot">
-          <span>Dylan Subramanian</span>
+          <span>Dylan Subramanian, {project.year}</span>
           <span>
             {pad(number)}/{pad(total)} {RARITY[project.rarity]}
           </span>

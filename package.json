@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 4000",
     "lint": "eslint",
-    "images": "node scripts/bake-wii.mjs && node scripts/placeholders.mjs"
+    "images": "node scripts/bake-wii.mjs && node scripts/placeholders.mjs && node scripts/card-colors.mjs"
   },
   "dependencies": {
     "next": "16.4.4",

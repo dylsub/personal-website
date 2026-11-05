@@ -27,31 +27,9 @@ export default function Home() {
   return (
     <main>
       <header className="site-banner">
+        <h1 className="sr-only">Dylan Subramanian</h1>
         <p>todo... more coming soon</p>
       </header>
-      <section className="reel">
-        <div className="intro-lead">
-          <h1 className="intro-heading">{intro.heading}</h1>
-          <dl className="intro-stats">
-            {intro.stats.map((stat) => (
-              <div key={stat.label}>
-                <dt>{stat.label}</dt>
-                <dd>{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="intro-goal">
-            <span className="intro-goal-label">{intro.goal.label}</span>
-            {intro.goal.text}
-          </p>
-        </div>
-        <div className="intro-body">
-          {intro.body.map((paragraph) => (
-            <p key={paragraph}>{withReadableDates(paragraph)}</p>
-          ))}
-        </div>
-        <DunkPlayer dunks={dunks} />
-      </section>
       <GamesIntro />
       <WiiSection games={games} />
       <section className="binder-section" aria-labelledby="projects-heading">
@@ -74,6 +52,29 @@ export default function Home() {
             </>
           }
         />
+      </section>
+      <section className="reel">
+        <div className="intro-lead">
+          <h2 className="intro-heading">{intro.heading}</h2>
+          <dl className="intro-stats">
+            {intro.stats.map((stat) => (
+              <div key={stat.label}>
+                <dt>{stat.label}</dt>
+                <dd>{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="intro-goal">
+            <span className="intro-goal-label">{intro.goal.label}</span>
+            {intro.goal.text}
+          </p>
+        </div>
+        <div className="intro-body">
+          {intro.body.map((paragraph) => (
+            <p key={paragraph}>{withReadableDates(paragraph)}</p>
+          ))}
+        </div>
+        <DunkPlayer dunks={dunks} />
       </section>
     </main>
   );

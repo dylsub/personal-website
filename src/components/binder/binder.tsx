@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
 import { GameModal } from "@/components/game-modal";
@@ -113,6 +114,8 @@ export function Binder({
                     className="binder-card"
                     aria-label={`Look at ${p.title}`}
                     onClick={() => setHeld(index)}
+                    onPointerMove={tilt}
+                    onPointerLeave={untilt}
                   >
                     <ProjectCard
                       project={p}
@@ -137,6 +140,28 @@ export function Binder({
     </div>
   );
 
+  // The hovered card leans toward the pointer, up to 10°, and its glare
+  // sits under it. Mouse only; touch has no hover to follow.
+  const tilt = (e: ReactPointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--ry", `${(x - 0.5) * 20}deg`);
+    el.style.setProperty("--rx", `${(0.5 - y) * 20}deg`);
+    el.style.setProperty("--mx", `${x * 100}%`);
+    el.style.setProperty("--my", `${y * 100}%`);
+    el.dataset.tracking = "";
+  };
+
+  const untilt = (e: ReactPointerEvent<HTMLButtonElement>) => {
+    const el = e.currentTarget;
+    for (const v of ["--rx", "--ry", "--mx", "--my"])
+      el.style.removeProperty(v);
+    delete el.dataset.tracking;
+  };
+
   const project = held === null ? null : projects[held];
   const game = playing === null ? null : projects[playing];
 
@@ -151,17 +176,16 @@ export function Binder({
       </div>
 
       <div className="binder-stage">
-        {isOpen && (
-          <button
-            type="button"
-            className="binder-arrow"
-            aria-label="Previous pages"
-            disabled={current === 0}
-            onClick={() => go(-1)}
-          >
-            <Chevron flip />
-          </button>
-        )}
+        <button
+          type="button"
+          className="binder-arrow"
+          inert={!isOpen}
+          aria-label="Previous pages"
+          disabled={current === 0}
+          onClick={() => go(-1)}
+        >
+          <Chevron flip />
+        </button>
 
         <div
           ref={spreadRef}
@@ -216,31 +240,28 @@ export function Binder({
           )}
         </div>
 
-        {isOpen && (
-          <button
-            type="button"
-            className="binder-arrow"
-            aria-label="Next pages"
-            disabled={current === views - 1}
-            onClick={() => go(1)}
-          >
-            <Chevron />
-          </button>
-        )}
+        <button
+          type="button"
+          className="binder-arrow"
+          inert={!isOpen}
+          aria-label="Next pages"
+          disabled={current === views - 1}
+          onClick={() => go(1)}
+        >
+          <Chevron />
+        </button>
       </div>
 
-      {isOpen && (
-        <div className="binder-controls">
-          <p aria-live="polite">
-            {perView === 2
-              ? `Pages ${first + 1}–${first + 2} of ${pageCount}`
-              : `Page ${first + 1} of ${pageCount}`}
-          </p>
-          <button type="button" onClick={close}>
-            Close binder
-          </button>
-        </div>
-      )}
+      <div className="binder-controls" inert={!isOpen}>
+        <p aria-live="polite">
+          {perView === 2
+            ? `Pages ${first + 1}–${first + 2} of ${pageCount}`
+            : `Page ${first + 1} of ${pageCount}`}
+        </p>
+        <button type="button" onClick={close}>
+          Close binder
+        </button>
+      </div>
 
       {project && held !== null && (
         <CardViewer

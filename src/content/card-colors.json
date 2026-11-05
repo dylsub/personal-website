@@ -1,0 +1,74 @@
+{
+  "/projects/stem-and-buds/art.jpg": {
+    "dominant": "#5a5349",
+    "frame": "#5a5349",
+    "frameDeep": "#433e37",
+    "frameLight": "#837e77",
+    "face": "#dbd9d7",
+    "faceDeep": "#bab8b3",
+    "ink": "#1d1b16",
+    "strip": "#a4a19b",
+    "stripInk": "#1d1b16",
+    "contrast": 12.23
+  },
+  "/projects/deca/art.jpg": {
+    "dominant": "#05325c",
+    "frame": "#05325c",
+    "frameDeep": "#042645",
+    "frameLight": "#446585",
+    "face": "#c8d2db",
+    "faceDeep": "#97aabb",
+    "ink": "#1d1b16",
+    "strip": "#768ea5",
+    "stripInk": "#1d1b16",
+    "contrast": 11.22
+  },
+  "/projects/to-do-list/art.jpg": {
+    "dominant": "#e6e378",
+    "frame": "#b8b660",
+    "frameDeep": "#8a8848",
+    "frameLight": "#cac888",
+    "face": "#faf9e1",
+    "faceDeep": "#f5f4c7",
+    "ink": "#1d1b16",
+    "strip": "#f2f0b5",
+    "stripInk": "#1d1b16",
+    "contrast": 16.13
+  },
+  "/projects/down-bad-test/art.jpg": {
+    "dominant": "#130921",
+    "frame": "#130921",
+    "frameDeep": "#0e0719",
+    "frameLight": "#4e4759",
+    "face": "#cbc9ce",
+    "faceDeep": "#9d99a3",
+    "ink": "#1d1b16",
+    "strip": "#898490",
+    "stripInk": "#1d1b16",
+    "contrast": 10.47
+  },
+  "/projects/gambling-simulator/art.jpg": {
+    "dominant": "#4622a2",
+    "frame": "#4622a2",
+    "frameDeep": "#341a7a",
+    "frameLight": "#745ab9",
+    "face": "#d6ceeb",
+    "faceDeep": "#b2a3d8",
+    "ink": "#1d1b16",
+    "strip": "#9986cc",
+    "stripInk": "#1d1b16",
+    "contrast": 11.42
+  },
+  "/projects/vector-calculator/art.jpg": {
+    "dominant": "#87cdf9",
+    "frame": "#79b9e0",
+    "frameDeep": "#5b8ba8",
+    "frameLight": "#9bcae8",
+    "face": "#e5f4fe",
+    "faceDeep": "#cdeafd",
+    "ink": "#1d1b16",
+    "strip": "#bde4fc",
+    "stripInk": "#1d1b16",
+    "contrast": 15.31
+  }
+}

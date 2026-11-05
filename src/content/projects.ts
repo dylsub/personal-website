@@ -16,6 +16,8 @@ export type Project = {
   id: string;
   title: string;
   year: number;
+  /** The card's "Lv.", ranking the projects by how impressive they are. */
+  level: number;
   type: ProjectType;
   art: string;
   builtWith: string;
@@ -31,14 +33,16 @@ export type Project = {
   frame?: { width: number; height: number };
 };
 
+// In binder order, most impressive first.
 export const projects: Project[] = [
   {
     id: "stem-and-buds",
     title: "STEM & Buds Naperville",
     year: 2022,
+    level: 74,
     type: "web",
     art: "/projects/stem-and-buds/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
+    builtWith: "JS, CSS and HTML",
     description:
       "An outreach site for STEM & Buds, a for-youth, by-youth nonprofit that introduces kids to STEM.",
     links: [],
@@ -46,25 +50,13 @@ export const projects: Project[] = [
     rarity: "rare",
   },
   {
-    id: "deca",
-    title: "NVHS DECA Website",
-    year: 2022,
-    type: "web",
-    art: "/projects/deca/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
-    description:
-      "A prototype site for my school's DECA chapter, built to work as both an information hub and a resource for current members.",
-    links: [{ label: "Source code", href: `${SOURCE}/deca.html` }],
-    rarity: "uncommon",
-    embed: "/legacy/deca/index.html",
-  },
-  {
     id: "to-do-list",
     title: "Online To-Do List",
     year: 2022,
+    level: 61,
     type: "web",
     art: "/projects/to-do-list/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
+    builtWith: "JS, CSS and HTML",
     description:
       "Take notes and organize your responsibilities with this easy-to-use app. Your list saves in your browser.",
     links: [{ label: "Source code", href: `${SOURCE}/task.html` }],
@@ -75,9 +67,10 @@ export const projects: Project[] = [
     id: "down-bad-test",
     title: "Down Bad Test",
     year: 2022,
+    level: 52,
     type: "web",
     art: "/projects/down-bad-test/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
+    builtWith: "JS, CSS and HTML",
     description:
       'Take this checklist test to find out how "down bad" you are. For entertainment only.',
     links: [{ label: "Source code", href: `${SOURCE}/down.html` }],
@@ -85,12 +78,27 @@ export const projects: Project[] = [
     embed: "/legacy/down-bad-test/index.html",
   },
   {
+    id: "deca",
+    title: "NVHS DECA Website",
+    year: 2022,
+    level: 43,
+    type: "web",
+    art: "/projects/deca/art.jpg",
+    builtWith: "JS, CSS and HTML",
+    description:
+      "A prototype site for my school's DECA chapter, built to work as both an information hub and a resource for current members.",
+    links: [{ label: "Source code", href: `${SOURCE}/deca.html` }],
+    rarity: "uncommon",
+    embed: "/legacy/deca/index.html",
+  },
+  {
     id: "gambling-simulator",
     title: "Gambling Simulator",
     year: 2022,
+    level: 31,
     type: "web",
     art: "/projects/gambling-simulator/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
+    builtWith: "JS, CSS and HTML",
     description:
       "A gambling app I built to demonstrate probability for a STEM & Buds session.",
     links: [{ label: "Source code", href: `${SOURCE}/gamblingIndex.html` }],
@@ -101,9 +109,10 @@ export const projects: Project[] = [
     id: "vector-calculator",
     title: "3D Vector Calculator",
     year: 2022,
+    level: 17,
     type: "web",
     art: "/projects/vector-calculator/art.jpg",
-    builtWith: "JavaScript, CSS and HTML",
+    builtWith: "JS, CSS and HTML",
     description:
       "A precalc calculator for 3D vectors: cross product, dot product and magnitude.",
     links: [{ label: "Source code", href: `${SOURCE}/vector.html` }],
