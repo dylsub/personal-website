@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { FilmGrain } from "@/components/film-grain";
+import { usePageVisible } from "@/hooks/use-page-visible";
 import { favorites } from "@/content/favorites";
 import { slidesFor, type Game } from "@/content/games";
 
@@ -304,13 +305,16 @@ function FavoritesChannel({
 
 function Clock() {
   const [now, setNow] = useState<Date | null>(null);
+  const visible = usePageVisible();
 
+  // Stops while the tab is hidden and catches up on return.
   useEffect(() => {
+    if (!visible) return;
     const tick = () => setNow(new Date());
     tick();
     const interval = setInterval(tick, 10_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [visible]);
 
   if (!now) return <div className="wii-clock" />;
   const [time, period] = now

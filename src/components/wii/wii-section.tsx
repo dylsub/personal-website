@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GameModal } from "@/components/game-modal";
+import { usePageVisible } from "@/hooks/use-page-visible";
 import { slidesFor, type Game } from "@/content/games";
 import { WiiRemote, type RemoteButton } from "@/components/wii/wii-remote";
 import { FAVORITES_SLOT, SLOTS, WiiScreen } from "@/components/wii/wii-screen";
@@ -19,6 +20,7 @@ export function WiiSection({ games }: { games: Game[] }) {
   const [slide, setSlide] = useState(0);
   const [rumble, setRumble] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const visible = usePageVisible();
 
   // The favorites slot has no game; its "slides" are the covers on its shelf.
   const game = selected === FAVORITES_SLOT ? undefined : games[selected];
@@ -33,13 +35,13 @@ export function WiiSection({ games }: { games: Game[] }) {
 
   // Cycle through the game's images while its channel is open.
   useEffect(() => {
-    if (view !== "channel" || !on || slides.length < 2) return;
+    if (view !== "channel" || !on || !visible || slides.length < 2) return;
     const interval = setInterval(
       () => setSlide((s) => (s + 1) % slides.length),
       SLIDE_MS,
     );
     return () => clearInterval(interval);
-  }, [view, on, slides.length, selected]);
+  }, [view, on, visible, slides.length, selected]);
 
   const openChannel = (index: number) => {
     setSelected(index);

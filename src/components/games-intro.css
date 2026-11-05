@@ -1,6 +1,8 @@
 .games-intro {
   --track: rgb(243 239 231 / 0.45);
 
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
   max-width: 72rem;
   margin: 0 auto;
   padding: clamp(3rem, 10vh, 6rem) 1rem 2.5rem;

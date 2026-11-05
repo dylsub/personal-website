@@ -1,6 +1,9 @@
 /* ---------- Layout ---------- */
 
+/* Off screen, the browser skips laying out and drawing the whole console */
 .console {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
   max-width: 72rem;
   margin: 0 auto;
   padding: 0 1rem clamp(3rem, 10vh, 6rem);
@@ -482,15 +485,11 @@
 
 /* ---------- CRT ---------- */
 
-/* Composite video never resolves fine detail; soften the picture a touch. */
-.wii-menu,
-.wii-channel {
-  filter: blur(0.35px) contrast(1.04) saturate(1.06);
-}
-
+/* A still layer of faint grain across the picture. Held still, it costs
+   nothing once drawn, where moving static would redraw the screen every frame. */
 .film-grain.wii-static {
   z-index: 15;
-  opacity: 0.08;
+  opacity: 0.05;
 }
 
 .wii-crt {
@@ -516,34 +515,6 @@
       rgb(0 0 0 / 0.07) 0 0.11cqw,
       transparent 0.11cqw 0.3125cqw
     );
-}
-
-/* A faint band of interference that rolls slowly down the picture */
-.wii-crt::after {
-  content: "";
-  position: absolute;
-  inset: -20% 0 auto;
-  height: 20%;
-  background: linear-gradient(
-    transparent,
-    rgb(255 255 255 / 0.05) 45%,
-    rgb(0 0 0 / 0.03) 55%,
-    transparent
-  );
-  animation: wii-roll 9s linear infinite;
-}
-
-@keyframes wii-roll {
-  to {
-    transform: translateY(600%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wii-crt::after {
-    animation: none;
-    display: none;
-  }
 }
 
 /* ---------- Pointer ---------- */

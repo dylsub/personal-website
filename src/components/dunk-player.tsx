@@ -17,8 +17,9 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  // Off-screen, the clip pauses to save decoding work. A pause the viewer
-  // chose sticks; only one we made is undone when the clip scrolls back in.
+  // Off-screen or in a background tab, the clip pauses to save decoding work.
+  // A pause the viewer chose sticks; only one we made is undone when the clip
+  // comes back into view.
   const inViewRef = useRef(true);
   const userPausedRef = useRef(false);
   const [active, setActive] = useState(0);
@@ -30,6 +31,7 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const [burst, setBurst] = useState(true);
 
   const dunk = dunks[active];
+  const canPlay = () => inViewRef.current && !document.hidden;
 
   useEffect(() => {
     if (!burst) return;
@@ -40,17 +42,24 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    const sync = () => {
+      if (!canPlay()) video.pause();
+      else if (!userPausedRef.current) video.play().catch(() => {});
+    };
     const observer = new IntersectionObserver(([entry]) => {
       inViewRef.current = entry.isIntersecting;
-      if (!entry.isIntersecting) video.pause();
-      else if (!userPausedRef.current) video.play().catch(() => {});
+      sync();
     });
     observer.observe(video);
-    return () => observer.disconnect();
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+    };
   }, []);
 
   useEffect(() => {
-    if (inViewRef.current) videoRef.current?.play().catch(() => {});
+    if (canPlay()) videoRef.current?.play().catch(() => {});
   }, [active]);
 
   useEffect(() => {
@@ -61,7 +70,7 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
     const video = videoRef.current;
     if (!video) return;
     video.currentTime = 0;
-    if (inViewRef.current) video.play().catch(() => {});
+    if (canPlay()) video.play().catch(() => {});
   };
 
   const playDunk = (index: number) => {
@@ -106,10 +115,8 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
           onTimeUpdate={syncTime}
           onLoadedMetadata={syncTime}
         />
-        <div className="film-tint" />
         <div className="film-vignette" />
         <FilmGrain burst={burst} />
-        <div className="film-flicker" />
 
         <p className="reel-count">
           <span className="sr-only">
