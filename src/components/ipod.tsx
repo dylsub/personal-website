@@ -84,22 +84,9 @@ export function IPod({
       }),
     );
     observer.observe(list);
-    // The mouse wheel scrolls the list, and hands back to the page once the
-    // list can't go any further that way.
-    const wheel = (event: WheelEvent) => {
-      const max = list.scrollHeight - list.clientHeight;
-      const atEnd =
-        event.deltaY < 0 ? list.scrollTop <= 0 : list.scrollTop >= max - 1;
-      if (max <= 0 || atEnd) return;
-      event.preventDefault();
-      list.scrollTop += event.deltaY;
-    };
-    const browser = list.parentElement!;
-    browser.addEventListener("wheel", wheel, { passive: false });
-    return () => {
-      observer.disconnect();
-      browser.removeEventListener("wheel", wheel);
-    };
+    // The mouse wheel is left to scroll the page; the list moves only by its
+    // scroll bar and the click wheel.
+    return () => observer.disconnect();
   }, []);
 
   // Dragging the thumb keeps hold of the spot it was grabbed by; pressing the
