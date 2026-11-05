@@ -316,6 +316,50 @@ body {
   opacity: 0.9;
 }
 
+/* Where this clip sits in the collection, read out like a camcorder's
+   on-screen counter: the number, then one tick per dunk */
+.reel-count {
+  position: absolute;
+  top: clamp(1.25rem, 2.5vw, 1.75rem);
+  right: clamp(1.25rem, 2.5vw, 1.75rem);
+  display: grid;
+  justify-items: end;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem 0.6rem;
+  border-radius: 10px;
+  background: rgb(20 19 17 / 0.55);
+  font-family: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.reel-count-now {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.reel-count-total {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.reel-count-ticks {
+  display: flex;
+  gap: 3px;
+}
+
+.reel-count-ticks i {
+  width: 6px;
+  height: 3px;
+  border-radius: 1px;
+  background: rgb(243 239 231 / 0.25);
+  transition: background 0.2s;
+}
+
+.reel-count-ticks i[data-passed] {
+  background: var(--paper);
+}
+
 /* ---------- iPod ---------- */
 
 .ipod {
@@ -686,6 +730,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  max-width: calc(100vw - 2rem);
   padding: 0.4rem 0.6rem;
   border-radius: 10px;
   background: rgb(0 0 0 / 0.8);
@@ -694,6 +739,7 @@ body {
 }
 
 .font-switcher select {
+  min-width: 0;
   padding: 0.2rem;
   border-radius: 6px;
   background: #fff;

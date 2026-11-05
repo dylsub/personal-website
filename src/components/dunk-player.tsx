@@ -13,6 +13,8 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
 export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   // Off-screen, the clip pauses to save decoding work. A pause the viewer
@@ -108,6 +110,21 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
         <div className="film-vignette" />
         <FilmGrain burst={burst} />
         <div className="film-flicker" />
+
+        <p className="reel-count">
+          <span className="sr-only">
+            Dunk {active + 1} of {dunks.length}
+          </span>
+          <span aria-hidden>
+            <span className="reel-count-now">{pad(active + 1)}</span>
+            <span className="reel-count-total"> / {pad(dunks.length)}</span>
+          </span>
+          <span className="reel-count-ticks" aria-hidden>
+            {dunks.map((d, i) => (
+              <i key={d.id} data-passed={i <= active || undefined} />
+            ))}
+          </span>
+        </p>
 
         <div className="caption" aria-live="polite">
           <h2 className="caption-title">{dunk.title}</h2>
