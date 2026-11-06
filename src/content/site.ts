@@ -3,8 +3,9 @@ export const site = {
   /** The handle used everywhere, and the domain */
   handle: "dylsub",
   url: "https://www.dylsub.me",
+  /** For search results and link previews */
   description:
-    'Dylan Subramanian (dylsub) is a dunker training to go pro with a 43" vertical, and a game developer who started out building Minecraft minigames. His games, older projects and dunk clips, all in one place.',
+    "The portfolio of Dylan Subramanian (dylsub): recent projects, the games he's made, his legacy projects from before AI, and his dunk clips.",
   email: "dylansubramanian@gmail.com",
   linkedin: "https://www.linkedin.com/in/dylsub/",
   x: "https://x.com/dylsub",
