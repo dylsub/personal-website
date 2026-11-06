@@ -5,7 +5,7 @@ export const site = {
   url: "https://www.dylsub.me",
   /** For search results and link previews */
   description:
-    "Hey, I'm Dylan Subramanian (dylsub). Welcome to my portfolio, a collection of the things I've built over the years. Take a look around!",
+    "Hey, I'm Dylan Subramanian. Welcome to my portfolio, a collection of the things I've built over the years. Take a look around!",
   email: "dylansubramanian@gmail.com",
   linkedin: "https://www.linkedin.com/in/dylsub/",
   x: "https://x.com/dylsub",

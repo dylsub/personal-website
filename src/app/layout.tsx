@@ -3,7 +3,8 @@ import { site } from "@/content/site";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
-const title = `${site.name} (${site.handle})`;
+// The tab and search-result title: just the handle
+const title = site.handle;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
