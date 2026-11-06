@@ -9,6 +9,13 @@
   padding: 0 1rem clamp(3rem, 10vh, 6rem);
 }
 
+/* On a phone the remote is left out; the screen takes taps directly */
+@media (max-width: 63.99rem) {
+  .console-inner > .remote {
+    display: none;
+  }
+}
+
 .console-inner {
   container-type: inline-size;
   display: flex;

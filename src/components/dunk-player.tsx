@@ -147,6 +147,54 @@ export function DunkPlayer({ dunks }: { dunks: Dunk[] }) {
         )}
         <FilmGrain burst={burst} />
 
+        {/* On a phone there's no iPod: the clip works like a story. Tap
+            either side to step through the dunks, the middle to pause. */}
+        <button
+          type="button"
+          className="film-step film-step-back"
+          aria-label="Previous dunk"
+          onClick={(event) => {
+            event.stopPropagation();
+            playDunk((active - 1 + dunks.length) % dunks.length);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden>
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="film-step film-step-next"
+          aria-label="Next dunk"
+          onClick={(event) => {
+            event.stopPropagation();
+            playDunk((active + 1) % dunks.length);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden>
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="film-sound"
+          aria-label={muted ? "Turn sound on" : "Turn sound off"}
+          aria-pressed={!muted}
+          onClick={(event) => {
+            event.stopPropagation();
+            setMuted((m) => !m);
+          }}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden>
+            <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+            {muted ? (
+              <path d="m16 9 5 6m0-6-5 6" />
+            ) : (
+              <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" />
+            )}
+          </svg>
+        </button>
+
         <p className="reel-count">
           <span className="sr-only">
             Dunk {active + 1} of {dunks.length}

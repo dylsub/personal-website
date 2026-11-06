@@ -499,6 +499,86 @@ main {
 
 /* ---------- Film stage ---------- */
 
+/* Phone controls, story style: the left and right thirds of the clip step
+   through the dunks, with a sound toggle in the corner. The iPod does all
+   this on wide screens, so they're hidden there. */
+.film-step,
+.film-sound {
+  position: absolute;
+  z-index: 2;
+  color: #fff;
+  cursor: pointer;
+}
+
+.film-step {
+  top: 18%;
+  bottom: 22%;
+  width: 28%;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+
+.film-step-back {
+  left: 0;
+}
+
+.film-step-next {
+  right: 0;
+  justify-content: flex-end;
+}
+
+.film-step svg,
+.film-sound svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.6));
+}
+
+.film-step svg {
+  opacity: 0.75;
+}
+
+.film-sound {
+  top: 1rem;
+  left: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.film-sound svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.film-sound path:first-child {
+  fill: currentColor;
+}
+
+@media (min-width: 64rem) {
+  .film-step,
+  .film-sound {
+    display: none;
+  }
+}
+
+/* No iPod on a phone: the clip's own controls stand in for it */
+@media (max-width: 63.99rem) {
+  .reel-deck {
+    display: none;
+  }
+}
+
 .film {
   background: #1d1c1a center / cover no-repeat;
   cursor: pointer;

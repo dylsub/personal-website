@@ -35,7 +35,8 @@
   justify-content: center;
 }
 
-.binder[data-phase="open"] .binder-intro {
+/* Wide, the open pages cover the words; narrow, they stay above */
+.binder[data-wide][data-phase="open"] .binder-intro {
   visibility: hidden;
 }
 
@@ -551,6 +552,42 @@
 
 .binder-controls button:hover {
   background: rgb(243 239 231 / 0.18);
+}
+
+/* One page wide: the side arrows would squeeze the pages, so they go, the
+   page gets the full width, and the counter row carries the arrows. The
+   row stays in the flow (hidden while shut), so opening, turning and
+   closing never change the binder's height. */
+.binder:not([data-wide]) .binder-stage > .binder-arrow {
+  display: none;
+}
+
+.binder:not([data-wide]) .binder-controls {
+  position: static;
+  translate: none;
+  gap: 0.75rem;
+}
+
+.binder-controls .binder-step {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+.binder-step:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.binder-step svg {
+  width: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ---------- Opening ---------- */

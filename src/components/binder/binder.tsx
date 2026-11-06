@@ -254,11 +254,34 @@ export function Binder({
       </div>
 
       <div className="binder-controls" inert={!isOpen}>
+        {/* One page wide, the arrows sit here instead of beside the pages */}
+        {perView === 1 && (
+          <button
+            type="button"
+            className="binder-step"
+            aria-label="Previous page"
+            disabled={current === 0}
+            onClick={() => go(-1)}
+          >
+            <Chevron flip />
+          </button>
+        )}
         <p aria-live="polite">
           {perView === 2
             ? `Pages ${first + 1}–${first + 2} of ${pageCount}`
             : `Page ${first + 1} of ${pageCount}`}
         </p>
+        {perView === 1 && (
+          <button
+            type="button"
+            className="binder-step"
+            aria-label="Next page"
+            disabled={current === views - 1}
+            onClick={() => go(1)}
+          >
+            <Chevron />
+          </button>
+        )}
         <button type="button" onClick={close}>
           Close binder
         </button>
