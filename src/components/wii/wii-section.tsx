@@ -11,14 +11,11 @@ import "./wii.css";
 
 const COLUMNS = 4;
 const SLIDE_MS = 3500;
-const RUMBLE_MS = 320;
-
 export function WiiSection({ games }: { games: Game[] }) {
   const [on, setOn] = useState(true);
   const [view, setView] = useState<"menu" | "channel">("menu");
   const [selected, setSelected] = useState(0);
   const [slide, setSlide] = useState(0);
-  const [rumble, setRumble] = useState(false);
   const [playing, setPlaying] = useState(false);
   const visible = usePageVisible();
 
@@ -26,12 +23,6 @@ export function WiiSection({ games }: { games: Game[] }) {
   const game = selected === FAVORITES_SLOT ? undefined : games[selected];
   const slides = game ? slidesFor(game) : [];
   const count = game ? slides.length : favorites.games.length;
-
-  useEffect(() => {
-    if (!rumble) return;
-    const timeout = setTimeout(() => setRumble(false), RUMBLE_MS);
-    return () => clearTimeout(timeout);
-  }, [rumble]);
 
   // Cycle through the game's images while its channel is open.
   useEffect(() => {
@@ -47,7 +38,6 @@ export function WiiSection({ games }: { games: Game[] }) {
     setSelected(index);
     setSlide(0);
     setView("channel");
-    setRumble(true);
   };
 
   const backToMenu = () => setView("menu");
@@ -125,7 +115,7 @@ export function WiiSection({ games }: { games: Game[] }) {
   return (
     <section className="console" aria-label="Games I've made">
       <div className="console-inner">
-        <WiiRemote rumble={rumble} on={on} onPress={handleRemote} />
+        <WiiRemote on={on} onPress={handleRemote} />
         <WiiScreen
           games={games}
           on={on}

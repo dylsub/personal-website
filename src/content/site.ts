@@ -5,6 +5,9 @@ export const site = {
   url: "https://www.dylsub.me",
   description:
     'Dylan Subramanian (dylsub) is a dunker training to go pro with a 43" vertical, and a game developer who started out building Minecraft minigames. His games, older projects and dunk clips, all in one place.',
+  email: "dylansubramanian@gmail.com",
+  linkedin: "https://www.linkedin.com/in/dylsub/",
+  x: "https://x.com/dylsub",
   /** Instagram handle, without the @ */
   instagram: "dylsub",
   /** Other profiles that are also me, for search engines to connect */
@@ -12,5 +15,7 @@ export const site = {
     "https://www.instagram.com/dylsub/",
     "https://dylsub.itch.io/",
     "https://github.com/dylsub",
+    "https://www.linkedin.com/in/dylsub/",
+    "https://x.com/dylsub",
   ],
 };

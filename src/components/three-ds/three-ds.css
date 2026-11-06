@@ -2,9 +2,9 @@
 
 /* Sizes inside are cqw of the console's width, so it scales as one */
 .ds-scene {
-  --shell: #37a8cd;
-  --shell-light: #8ad7ef;
-  --shell-deep: #1b6f93;
+  --shell: #cc2a32;
+  --shell-light: #f2787a;
+  --shell-deep: #8a141b;
   --inner: #101418;
   --inner-light: #262c33;
   --button: #2b3036;
@@ -310,33 +310,23 @@
   color: #4b5560;
 }
 
-.ds-app-title {
+/* The photo being viewed, square in a white frame above the buttons */
+.ds-app-photo {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 1cqw 0;
-  background: linear-gradient(#ffffff, #e4eaef);
-  border-bottom: 0.2cqw solid #c5ced6;
-  font-size: 2.6cqw;
-  font-weight: 800;
-  text-align: center;
+  top: 4.6%;
+  left: 50%;
+  width: 57.8%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 0.45cqw #fff,
+    0 0 0 0.65cqw #c5ced6,
+    0 0.6cqw 1.2cqw rgb(0 0 0 / 0.25);
 }
 
-/* The shutter: a big round button in the middle */
-.ds-app-shutter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 13cqw;
-  aspect-ratio: 1;
-  translate: -50% -42%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, #ff8a6b, #e2452a 70%);
-  box-shadow:
-    0 0 0 1cqw #fff,
-    0 0 0 1.25cqw #c5ced6,
-    0 0.8cqw 1.4cqw rgb(0 0 0 / 0.25);
+.ds-app-photo img {
+  object-fit: cover;
 }
 
 .ds-app-button {
@@ -505,6 +495,23 @@
    fades in once built; the drawing then fades out beneath it. */
 .ds-viewer {
   position: relative;
+  isolation: isolate;
+}
+
+/* A dim pool of light on the table behind the console, so its dark faces
+   stand out from the dark page */
+.ds-viewer::before {
+  content: "";
+  position: absolute;
+  inset: -20% -15%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 50% 45% at 50% 52%,
+    rgb(243 239 231 / 0.11),
+    rgb(243 239 231 / 0.04) 55%,
+    transparent 75%
+  );
+  pointer-events: none;
 }
 
 .ds-canvas {
@@ -512,11 +519,6 @@
   inset: -12% -6% -14%;
   opacity: 0;
   transition: opacity 0.6s ease-out;
-  cursor: grab;
-}
-
-.ds-canvas:active {
-  cursor: grabbing;
 }
 
 /* Sized and placed by the scene, overhanging the box all round */
@@ -537,20 +539,4 @@
 
 .ds-viewer[data-ready] .ds-scene {
   opacity: 0;
-}
-
-.ds-hint {
-  position: absolute;
-  left: 50%;
-  bottom: -2.5rem;
-  translate: -50% 0;
-  font-family: var(--font-label);
-  font-size: 0.75rem;
-  color: rgb(243 239 231 / 0.45);
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-
-.ds-viewer[data-ready] .ds-hint {
-  opacity: 1;
 }

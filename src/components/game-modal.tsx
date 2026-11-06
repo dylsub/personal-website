@@ -8,6 +8,8 @@ type GameModalProps = {
   /** The build's native size; the frame keeps this shape as it shrinks. */
   width?: number;
   height?: number;
+  /** Where "Open in new tab" goes, when that isn't `src` itself. */
+  href?: string;
   onClose: () => void;
 };
 
@@ -17,6 +19,7 @@ export function GameModal({
   src,
   width = 475,
   height = 563,
+  href = src,
   onClose,
 }: GameModalProps) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -42,10 +45,10 @@ export function GameModal({
         <header>
           <h2>{title}</h2>
           <div className="game-modal-actions">
-            <a href={src} target="_blank" rel="noopener noreferrer">
+            <a href={href} target="_blank" rel="noopener noreferrer">
               Open in new tab
             </a>
-            <button type="button" aria-label="Close game" onClick={onClose}>
+            <button type="button" aria-label="Close" onClick={onClose}>
               ×
             </button>
           </div>
@@ -53,15 +56,20 @@ export function GameModal({
         <iframe
           src={src}
           title={title}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
           style={{ width, aspectRatio: `${width} / ${height}` }}
           onLoad={(e) => {
             // Keys go to the game, not the page, once the frame has focus,
             // so listen inside it for Escape too.
             const frame = e.currentTarget;
             frame.focus();
-            frame.contentWindow?.addEventListener("keydown", (key) => {
-              if (key.key === "Escape") onClose();
-            });
+            // Another site's frame (a YouTube video) won't take a listener.
+            try {
+              frame.contentWindow?.addEventListener("keydown", (key) => {
+                if (key.key === "Escape") onClose();
+              });
+            } catch {}
           }}
         />
       </div>

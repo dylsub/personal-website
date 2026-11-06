@@ -290,7 +290,7 @@ export function Binder({
   );
 }
 
-/** The binder's front: padded vinyl, a label plate and a round clasp. */
+/** The binder's front: molded plastic, a title window, an LCD and a latch. */
 function Cover({ count }: { count: number }) {
   return (
     <span className="binder-cover-face">

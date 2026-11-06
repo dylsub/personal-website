@@ -11,7 +11,7 @@ const D = 74;
 const T = 10.5;
 const LID_LEAN = THREE.MathUtils.degToRad(16);
 
-const AQUA = "#1d9ccf";
+const RED = "#c8202b";
 
 // The canvas runs this far past its box on every side (as a share of the
 // box's width), so the corners don't clip when the console is turned
@@ -22,6 +22,8 @@ const FOV = 26;
 
 type Options = {
   photo: string;
+  /** Shown square in the camera app's viewer, on the bottom screen */
+  bottomPhoto: string;
   stamp: string;
   /** Font families as CSS sees them, for text drawn into the screens */
   labelFont: string;
@@ -36,7 +38,7 @@ export type DSScene = { dispose: () => void };
  */
 export async function createDS(
   host: HTMLElement,
-  { photo, stamp, labelFont, roundedFont }: Options,
+  { photo, bottomPhoto, stamp, labelFont, roundedFont }: Options,
 ): Promise<DSScene> {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -64,7 +66,7 @@ export async function createDS(
   const shell = new THREE.MeshPhysicalMaterial({
     envMap: studio,
     envMapIntensity: 0.6,
-    color: AQUA,
+    color: RED,
     roughness: 0.32,
     clearcoat: 1,
     clearcoatRoughness: 0.12,
@@ -102,7 +104,7 @@ export async function createDS(
   await document.fonts.ready;
   const [topTexture, bottomTexture] = await Promise.all([
     topScreen(photo, stamp, labelFont),
-    Promise.resolve(bottomScreen(roundedFont)),
+    bottomScreen(bottomPhoto, roundedFont),
   ]);
   for (const t of [topTexture, bottomTexture]) {
     t.colorSpace = THREE.SRGBColorSpace;
@@ -317,10 +319,22 @@ export async function createDS(
   // ---------- Camera and controls ----------
   const camera = new THREE.PerspectiveCamera(FOV, 1, 10, 2000);
   const target = new THREE.Vector3(0, 30, -14);
-  camera.position.set(0, 175, 300);
+  // Starts above and off to the right, looking down on the console as it
+  // turns to face left
+  camera.position
+    .setFromSpherical(
+      new THREE.Spherical(
+        346,
+        THREE.MathUtils.degToRad(58),
+        THREE.MathUtils.degToRad(22),
+      ),
+    )
+    .add(target);
   // Where it starts, kept for lining the model up when the box resizes
   const rest = camera.clone();
   rest.lookAt(target);
+  // project() reads the world matrix, which lookAt alone doesn't update
+  rest.updateMatrixWorld();
 
   // The two halves' shells, in world space: the model's outline
   scene.updateMatrixWorld();
@@ -329,7 +343,9 @@ export async function createDS(
     const pos = body.geometry.getAttribute("position");
     for (let i = 0; i < pos.count; i++) {
       outline.push(
-        new THREE.Vector3().fromBufferAttribute(pos, i).applyMatrix4(body.matrixWorld),
+        new THREE.Vector3()
+          .fromBufferAttribute(pos, i)
+          .applyMatrix4(body.matrixWorld),
       );
     }
   }
@@ -343,6 +359,10 @@ export async function createDS(
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.rotateSpeed = 0.7;
+  // An open hand over it and a closed one while dragging, the only hint
+  // that it turns. Set here, not in CSS: the controls write the cursor
+  // inline, and a torn-down scene leaves "auto" behind on the box.
+  controls.cursorStyle = "grab";
   // Turn it around a good way, but never under the table or past side-on
   controls.minPolarAngle = THREE.MathUtils.degToRad(20);
   controls.maxPolarAngle = THREE.MathUtils.degToRad(80);
@@ -361,10 +381,14 @@ export async function createDS(
     const fullW = width + 2 * bleed;
     const fullH = height + 2 * bleed;
     renderer.setSize(fullW, fullH);
-    renderer.domElement.style.left = renderer.domElement.style.top = `${-bleed}px`;
+    renderer.domElement.style.left =
+      renderer.domElement.style.top = `${-bleed}px`;
 
     const fov = THREE.MathUtils.radToDeg(
-      2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * (fullH / height)),
+      2 *
+        Math.atan(
+          Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * (fullH / height),
+        ),
     );
     for (const c of [camera, rest]) {
       c.fov = fov;
@@ -373,11 +397,14 @@ export async function createDS(
     }
 
     // Slide the view so that, as it starts, the model's right edge sits on
-    // the box's right edge
+    // the right edge of the viewer (the box overhangs it a little)
     let right = -Infinity;
     const p = new THREE.Vector3();
     for (const v of outline) right = Math.max(right, p.copy(v).project(rest).x);
-    const shift = width + bleed - ((right + 1) / 2) * fullW;
+    const edge =
+      (host.parentElement ?? host).getBoundingClientRect().right -
+      host.getBoundingClientRect().left;
+    const shift = edge + bleed - ((right + 1) / 2) * fullW;
     camera.setViewOffset(fullW, fullH, -shift, 0, fullW, fullH);
     render();
   };
@@ -476,8 +503,8 @@ async function topScreen(src: string, stamp: string, font: string) {
   return new THREE.CanvasTexture(canvas);
 }
 
-/** The camera app's controls, on the bottom screen. */
-function bottomScreen(font: string) {
+/** The camera app's photo viewer, on the bottom screen. */
+async function bottomScreen(src: string, font: string) {
   const [w, h] = [640, 480];
   const canvas = document.createElement("canvas");
   canvas.width = w;
@@ -490,41 +517,35 @@ function bottomScreen(font: string) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, w, 64);
+  // The photo being viewed, square in a white frame above the buttons
+  const img = new Image();
+  img.src = src;
+  await img.decode();
+  const [s, x, y] = [370, (w - 370) / 2, 22];
+  ctx.shadowColor = "rgb(0 0 0 / 0.25)";
+  ctx.shadowBlur = 16;
+  ctx.shadowOffsetY = 6;
   ctx.fillStyle = "#c5ced6";
-  ctx.fillRect(0, 64, w, 3);
-  ctx.fillStyle = "#4b5560";
-  ctx.font = `800 34px ${font}`;
-  ctx.textAlign = "center";
-  ctx.fillText("Camera", w / 2, 44);
-
-  // Shutter
-  ctx.beginPath();
-  ctx.arc(w / 2, h / 2 + 20, 96, 0, Math.PI * 2);
-  ctx.fillStyle = "#c5ced6";
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(w / 2, h / 2 + 20, 90, 0, Math.PI * 2);
+  ctx.fillRect(x - 10, y - 10, s + 20, s + 20);
+  ctx.shadowColor = "transparent";
   ctx.fillStyle = "#fff";
-  ctx.fill();
-  const red = ctx.createRadialGradient(
-    w / 2,
-    h / 2 - 10,
-    10,
-    w / 2,
-    h / 2 + 20,
-    76,
+  ctx.fillRect(x - 7, y - 7, s + 14, s + 14);
+  const crop = Math.min(img.naturalWidth, img.naturalHeight);
+  ctx.drawImage(
+    img,
+    (img.naturalWidth - crop) / 2,
+    (img.naturalHeight - crop) / 2,
+    crop,
+    crop,
+    x,
+    y,
+    s,
+    s,
   );
-  red.addColorStop(0, "#ff8a6b");
-  red.addColorStop(1, "#e2452a");
-  ctx.beginPath();
-  ctx.arc(w / 2, h / 2 + 20, 76, 0, Math.PI * 2);
-  ctx.fillStyle = red;
-  ctx.fill();
 
   // Two pill buttons along the bottom
   ctx.font = `800 26px ${font}`;
+  ctx.textAlign = "center";
   for (const [x, label] of [
     [96, "Photos"],
     [w - 96, "Effects"],

@@ -16,15 +16,14 @@ export type RemoteButton =
 
 type WiiRemoteProps = {
   on: boolean;
-  rumble: boolean;
   onPress: (button: RemoteButton) => void;
 };
 
-export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
+export function WiiRemote({ on, onPress }: WiiRemoteProps) {
   const press = (button: RemoteButton) => () => onPress(button);
 
   return (
-    <div className="remote" data-rumble={rumble || undefined}>
+    <div className="remote">
       <button
         type="button"
         className="remote-btn remote-power"
@@ -76,6 +75,15 @@ export function WiiRemote({ on, rumble, onPress }: WiiRemoteProps) {
         onClick={press("a")}
       >
         A
+      </button>
+      {/* B is a trigger on the underside, peeking out past the left edge */}
+      <button
+        type="button"
+        className="remote-trigger"
+        aria-label="B"
+        onClick={press("b")}
+      >
+        B
       </button>
 
       <button
@@ -162,9 +170,9 @@ function DpadFace() {
     <svg className="dpad-face" viewBox="0 0 100 100" aria-hidden>
       <defs>
         <linearGradient id="dpad-body" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#e2343c" />
-          <stop offset="0.55" stopColor="#c4161f" />
-          <stop offset="1" stopColor="#a3111a" />
+          <stop offset="0" style={{ stopColor: "var(--button-hi)" }} />
+          <stop offset="0.55" style={{ stopColor: "var(--button)" }} />
+          <stop offset="1" style={{ stopColor: "var(--button-lo)" }} />
         </linearGradient>
         <radialGradient id="dpad-dish" cx="0.5" cy="0.45" r="0.5">
           <stop offset="0" stopColor="#000" stopOpacity="0.28" />

@@ -7,8 +7,8 @@
   margin: 0 auto;
   /* Shut, the binder sits evenly between its neighbours: the space below
      (this padding plus the dunking section's top padding) matches the space
-     above (the Wii's bottom padding plus this top padding), each 15px roomier. */
-  padding: calc(clamp(2rem, 6vh, 4rem) + 15px) 1rem
+     above (the Wii's bottom padding plus this top padding), each 25px roomier. */
+  padding: calc(clamp(2rem, 6vh, 4rem) + 25px) 1rem
     calc(
       clamp(3rem, 10vh, 6rem) + clamp(2rem, 6vh, 4rem) -
         clamp(1.5rem, 8vh, 6rem) + 15px
@@ -80,9 +80,12 @@
 
 .binder {
   position: relative;
-  --vinyl: #22365a;
-  --vinyl-deep: #172641;
-  --stitch: rgb(255 255 255 / 0.28);
+  /* Molded silver-grey plastic, like the iPod: neutral, so each card's
+     own colour stands out */
+  --shell: #bdbab2;
+  --shell-light: #e6e3dc;
+  --shell-deep: #8d8a83;
+  --print: #4a4843;
   --page: #131313;
   --page-width: min(26rem, 100%);
 
@@ -93,25 +96,27 @@
 
 /* ---------- Cover ---------- */
 
-/* The front of the cover, filling the flipper that swings it */
+/* The front of the cover, filling the flipper that swings it: a glossy
+   molded shell, lit from above like the 3DS's lid */
 .binder-cover {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 4px 16px 16px 4px;
+  border-radius: 10px 22px 22px 10px;
   backface-visibility: hidden;
   background:
-    linear-gradient(90deg, rgb(0 0 0 / 0.35), transparent 7%),
-    radial-gradient(
-      ellipse at 30% 20%,
-      rgb(255 255 255 / 0.12),
-      transparent 60%
-    ),
-    linear-gradient(160deg, var(--vinyl), var(--vinyl-deep));
+    linear-gradient(170deg, rgb(255 255 255 / 0.3), transparent 28%),
+    linear-gradient(
+      175deg,
+      var(--shell-light),
+      var(--shell) 30%,
+      var(--shell-deep)
+    );
   box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 2px 3px rgb(255 255 255 / 0.4),
+    inset 0 -4px 8px rgb(0 0 0 / 0.3),
     0 1.5rem 3rem rgb(0 0 0 / 0.45);
   cursor: pointer;
 }
@@ -132,29 +137,54 @@
   container-type: inline-size;
 }
 
-/* Stitching around the padded edge */
+/* The hinge down the spine: a rounded barrel, like the 3DS's */
 .binder-cover-face::before {
   content: "";
   position: absolute;
-  inset: 4.5% 4.5% 4.5% 8%;
-  border: 2px dashed var(--stitch);
-  border-radius: 6px 12px 12px 6px;
+  top: 2%;
+  bottom: 2%;
+  left: 0;
+  width: 7cqw;
+  border-radius: 3cqw;
+  background: linear-gradient(
+    90deg,
+    var(--shell-deep),
+    var(--shell-light) 40%,
+    var(--shell) 60%,
+    var(--shell-deep)
+  );
+  box-shadow: 0.4cqw 0 0.8cqw rgb(0 0 0 / 0.35);
 }
 
+/* A seam where the face plate meets the shell */
+.binder-cover-face::after {
+  content: "";
+  position: absolute;
+  inset: 4% 4% 4% 11%;
+  border-radius: 3cqw 5cqw 5cqw 3cqw;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.22),
+    0 0 0 1px rgb(255 255 255 / 0.08);
+  pointer-events: none;
+}
+
+/* The title behind a glossy black window, like a screen's bezel */
 .binder-label {
   position: absolute;
-  top: 24%;
-  left: 18%;
+  top: 26%;
+  left: 19%;
   right: 12%;
   display: grid;
-  gap: 2cqw;
-  padding: 5cqw 6cqw;
-  border-radius: 3cqw;
-  background: var(--paper);
-  color: #1b1b1a;
+  gap: 2.5cqw;
+  padding: 6cqw 6.5cqw;
+  border-radius: 2.5cqw;
+  background:
+    linear-gradient(125deg, rgb(255 255 255 / 0.12), transparent 35%),
+    linear-gradient(170deg, #262c33, #101418 50%);
   box-shadow:
-    inset 0 -0.6cqw 0 rgb(0 0 0 / 0.12),
-    0 1cqw 2cqw rgb(0 0 0 / 0.3);
+    inset 0 0 0 0.6cqw #05070a,
+    0 0.4cqw 0 rgb(255 255 255 / 0.12);
+  color: var(--paper);
   text-align: left;
 }
 
@@ -170,69 +200,91 @@
 .binder-volume {
   font-family: var(--font-label);
   font-size: 3.6cqw;
-  color: rgb(27 27 26 / 0.6);
+  color: rgb(243 239 231 / 0.55);
 }
 
-/* A round sticker counting what's been caught so far */
+/* How many have been caught, on a small LCD like the iPod's */
 .binder-sticker {
   position: absolute;
   top: 9%;
-  right: 11%;
-  display: grid;
-  place-content: center;
-  width: 19cqw;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #f2c94c;
-  color: #2b2410;
-  box-shadow: 0 0.6cqw 1.2cqw rgb(0 0 0 / 0.35);
-  font-family: var(--font-label);
-  font-size: 2.9cqw;
-  line-height: 1.1;
-  text-align: center;
-  rotate: 12deg;
+  right: 12%;
+  display: flex;
+  align-items: baseline;
+  gap: 2cqw;
+  padding: 1.6cqw 3cqw;
+  border-radius: 1.6cqw;
+  background: radial-gradient(ellipse at 40% 30%, #cdd3bd, var(--lcd) 70%);
+  box-shadow:
+    inset 0 0 0 0.7cqw #05070a,
+    inset 0 0.8cqw 1.2cqw rgb(0 0 0 / 0.25);
+  color: var(--lcd-ink);
+  font-family: var(--font-pixel);
+  font-size: 3.4cqw;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .binder-sticker b {
-  display: block;
-  font-size: 6.5cqw;
+  font-size: 6cqw;
+  font-weight: 400;
 }
 
-/* The clasp: a strap over the opening edge, fastened with a round button */
+/* The latch: a molded tab over the opening edge, with a round button like
+   the Wii remote's, in the site's red */
 .binder-clasp {
   position: absolute;
   top: 58%;
-  right: -3%;
-  width: 24cqw;
+  right: -2.5%;
+  width: 20cqw;
   height: 15cqw;
-  border-radius: 4cqw 0 0 4cqw;
-  background: linear-gradient(var(--vinyl-deep), #0f1a2e);
-  box-shadow: 0 0.8cqw 1.6cqw rgb(0 0 0 / 0.4);
+  border-radius: 5cqw 2cqw 2cqw 5cqw;
+  background: linear-gradient(
+    175deg,
+    var(--shell-light),
+    var(--shell) 30%,
+    var(--shell-deep)
+  );
+  box-shadow:
+    inset 0 0.5cqw 0.6cqw rgb(255 255 255 / 0.35),
+    inset 0 -0.6cqw 1cqw rgb(0 0 0 / 0.3),
+    0 0.8cqw 1.6cqw rgb(0 0 0 / 0.4);
 }
 
 .binder-clasp::before {
   content: "";
   position: absolute;
   top: 50%;
-  left: 3cqw;
-  width: 11cqw;
+  left: 3.5cqw;
+  width: 8.5cqw;
   aspect-ratio: 1;
   translate: 0 -50%;
   border-radius: 50%;
-  background:
-    radial-gradient(circle, #fff 0 17%, #222 17% 27%, transparent 27%),
-    linear-gradient(#e2433b 0 45%, #222 45% 55%, #f4f1ea 55%);
-  box-shadow: 0 0 0 0.5cqw #222;
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--accent-light),
+    var(--accent) 55%,
+    var(--accent-deep)
+  );
+  box-shadow:
+    0 0 0 0.6cqw rgb(0 0 0 / 0.28),
+    0 0 0 1cqw rgb(255 255 255 / 0.08),
+    inset 0 0.4cqw 0.4cqw rgb(255 255 255 / 0.25),
+    inset 0 -0.5cqw 0.6cqw rgb(0 0 0 / 0.25);
 }
 
+/* Printed on the shell, like the remote's HOME */
 .binder-hint {
   position: absolute;
-  left: 0;
+  left: 7cqw;
   right: 0;
   bottom: 8%;
-  font-family: var(--font-label);
-  font-size: 3.4cqw;
-  color: rgb(255 255 255 / 0.55);
+  font-family: var(--font-rounded);
+  font-weight: 800;
+  font-size: 3.2cqw;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--print);
+  opacity: 0.8;
   text-align: center;
 }
 
@@ -280,7 +332,7 @@
   right: max(-4rem, (100% - 100vw) / 2 + 0.25rem);
 }
 
-/* The open binder: the vinyl shows as a rim around the pages. Pockets are
+/* The open binder: the shell shows as a rim around the pages. Pockets are
    spaced in cqw of this box; a page can't size its own gaps from itself. */
 .binder-pages {
   container-type: inline-size;
@@ -289,8 +341,16 @@
   gap: 5%;
   padding: 3%;
   border-radius: 12px;
-  background: linear-gradient(160deg, var(--vinyl), var(--vinyl-deep));
-  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.45);
+  background: linear-gradient(
+    175deg,
+    var(--shell-light),
+    var(--shell) 8%,
+    var(--shell-deep)
+  );
+  box-shadow:
+    inset 0 2px 3px rgb(255 255 255 / 0.35),
+    inset 0 -4px 8px rgb(0 0 0 / 0.3),
+    0 1.5rem 3rem rgb(0 0 0 / 0.45);
 }
 
 .binder-pages[data-turn="next"] {

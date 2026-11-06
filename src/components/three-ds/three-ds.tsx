@@ -5,7 +5,8 @@ import "./three-ds.css";
  * An open 3DS, drawn in CSS and set in 3D: the bottom half lies back as if
  * resting on a table and the lid stands up behind it, hinged at the back,
  * open toward the viewer but not flat. The top screen shows a photo in an
- * old-school camera app; the bottom screen, that app's controls.
+ * old-school camera app; the bottom screen, another photo in that app's
+ * viewer.
  *
  * Everything inside is sized in cqw of the scene, so it scales as one.
  * The transforms are static, so it's drawn once and costs nothing after.
@@ -13,10 +14,13 @@ import "./three-ds.css";
 export function ThreeDS({
   photo,
   alt,
+  bottomPhoto,
   stamp,
 }: {
   photo: string;
   alt: string;
+  bottomPhoto: string;
+  bottomAlt: string;
   /** The date burned into the corner, old-digital-camera style */
   stamp: string;
 }) {
@@ -74,8 +78,9 @@ export function ThreeDS({
             </span>
 
             <div className="ds-bottom-screen">
-              <span className="ds-app-title">Camera</span>
-              <span className="ds-app-shutter" />
+              <span className="ds-app-photo">
+                <Image src={bottomPhoto} alt="" fill sizes="160px" />
+              </span>
               <span className="ds-app-button ds-app-left">Photos</span>
               <span className="ds-app-button ds-app-right">Effects</span>
             </div>

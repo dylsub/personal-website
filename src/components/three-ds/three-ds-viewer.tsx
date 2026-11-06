@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ThreeDS } from "@/components/three-ds/three-ds";
 
-type Props = { photo: string; alt: string; stamp: string };
+type Props = {
+  photo: string;
+  alt: string;
+  bottomPhoto: string;
+  bottomAlt: string;
+  stamp: string;
+};
 
 /**
  * The 3DS as a real 3D model that can be turned by dragging. The CSS
@@ -27,6 +33,7 @@ export function ThreeDSViewer(props: Props) {
         const css = getComputedStyle(document.documentElement);
         const built = await createDS(host, {
           photo: props.photo,
+          bottomPhoto: props.bottomPhoto,
           stamp: props.stamp,
           labelFont: css.getPropertyValue("--font-space-mono") || "monospace",
           roundedFont: css.getPropertyValue("--font-rounded") || "sans-serif",
@@ -43,7 +50,7 @@ export function ThreeDSViewer(props: Props) {
       disposed = true;
       scene?.dispose();
     };
-  }, [props.photo, props.stamp]);
+  }, [props.photo, props.bottomPhoto, props.stamp]);
 
   return (
     <div className="ds-viewer" data-ready={ready || undefined}>
@@ -52,11 +59,8 @@ export function ThreeDSViewer(props: Props) {
         ref={hostRef}
         className="ds-canvas"
         role="img"
-        aria-label={`A 3DS showing a photo: ${props.alt}. Drag to turn it.`}
+        aria-label={`A 3DS showing two photos. ${props.alt}; ${props.bottomAlt}. Drag to turn it.`}
       />
-      <p className="ds-hint" aria-hidden>
-        Drag to turn
-      </p>
     </div>
   );
 }

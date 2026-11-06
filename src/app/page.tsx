@@ -2,12 +2,18 @@ import { Binder } from "@/components/binder/binder";
 import { DunkPlayer } from "@/components/dunk-player";
 import { ThreeDSViewer } from "@/components/three-ds/three-ds-viewer";
 import { GamesIntro } from "@/components/games-intro";
+import { InstagramIcon } from "@/components/instagram-icon";
+import { LinkedInIcon } from "@/components/linkedin-icon";
+import { XIcon } from "@/components/x-icon";
+import { RecentProjects } from "@/components/recent-projects";
+import { SectionNav } from "@/components/section-nav";
 import { WiiSection } from "@/components/wii/wii-section";
 import { about } from "@/content/about";
 import { dunks } from "@/content/dunks";
 import { games } from "@/content/games";
 import { intro } from "@/content/intro";
 import { projects } from "@/content/projects";
+import { recentProjects } from "@/content/recent-projects";
 import { site } from "@/content/site";
 
 const personJsonLd = {
@@ -39,6 +45,12 @@ function withReadableDates(text: string) {
   );
 }
 
+// Pinned first, then newest first ("YYYY-MM" sorts by date as plain text)
+const newestFirst = recentProjects.toSorted(
+  (a, b) =>
+    Number(!!b.pinned) - Number(!!a.pinned) || b.date.localeCompare(a.date),
+);
+
 export default function Home() {
   return (
     <main>
@@ -54,23 +66,80 @@ export default function Home() {
         <h1 className="site-author">
           {site.name} <span>@{site.handle}</span>
         </h1>
-        <p>todo... more coming soon</p>
+        <ul className="site-links">
+          <li>
+            <a
+              href={site.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              data-brand="linkedin"
+            >
+              <LinkedInIcon />
+            </a>
+          </li>
+          <li>
+            <a
+              href={`https://www.instagram.com/${site.instagram}/reels/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              data-brand="instagram"
+            >
+              <InstagramIcon />
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.x}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X"
+              data-brand="x"
+            >
+              <XIcon />
+            </a>
+          </li>
+        </ul>
       </header>
-      <section className="about" aria-labelledby="about-heading">
+      <section id="about" className="about" aria-labelledby="about-heading">
         <div className="about-text">
           <h2 id="about-heading" className="about-heading">
             {about.heading}
           </h2>
+          <p className="about-body">{about.body}</p>
+          <ul className="about-facts">
+            {about.facts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
         </div>
         <ThreeDSViewer
           photo={about.photo.src}
           alt={about.photo.alt}
+          bottomPhoto={about.headshot.src}
+          bottomAlt={about.headshot.alt}
           stamp="'25 11 05"
         />
       </section>
+      <p className="aside">{about.aside}</p>
+      <section
+        id="projects"
+        className="recent"
+        aria-labelledby="recent-heading"
+      >
+        <h2 id="recent-heading" className="recent-heading">
+          Recent projects
+        </h2>
+        <RecentProjects projects={newestFirst} />
+      </section>
       <GamesIntro />
       <WiiSection games={games} />
-      <section className="binder-section" aria-labelledby="projects-heading">
+      <section
+        id="legacy"
+        className="binder-section"
+        aria-labelledby="projects-heading"
+      >
         <Binder
           projects={projects}
           intro={
@@ -91,7 +160,7 @@ export default function Home() {
           }
         />
       </section>
-      <section className="reel">
+      <section id="dunks" className="reel">
         <div className="intro-lead">
           <h2 className="intro-heading">{intro.heading}</h2>
           <dl className="intro-stats">
@@ -114,6 +183,11 @@ export default function Home() {
         </div>
         <DunkPlayer dunks={dunks} />
       </section>
+      <p className="aside aside-end">
+        Thank you for visiting my portfolio! Please contact me at{" "}
+        <a href={`mailto:${site.email}`}>{site.email}</a> if you want to chat 🔥
+      </p>
+      <SectionNav />
     </main>
   );
 }

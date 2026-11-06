@@ -9,6 +9,10 @@
   --wheel-label: #cfcabd;
   --lcd: #c2c8b1;
   --lcd-ink: #262b21;
+  /* The 3DS's red, the site's one accent, echoed in a few small places */
+  --accent: #cc2a32;
+  --accent-light: #e4333b;
+  --accent-deep: #8a141b;
 }
 
 /* ---------- Type ---------- */
@@ -68,6 +72,11 @@ main {
   opacity: 1;
 }
 
+/* Already loaded once: no fade, it's there at once */
+.blur-image[data-seen] {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .blur-image {
     transition: none;
@@ -105,8 +114,178 @@ main {
   color: rgb(243 239 231 / 0.55);
 }
 
+/* Profile links under the byline: white icons that take on each brand's
+   colour when pointed at. X's own colours are black and white, so it just
+   lifts. */
+.site-links {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.site-links a {
+  display: block;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--paper);
+  transition:
+    color 0.15s,
+    transform 0.15s;
+}
+
+.site-links a:hover,
+.site-links a:focus-visible {
+  transform: scale(1.12);
+}
+
+.site-links a[data-brand="linkedin"]:hover,
+.site-links a[data-brand="linkedin"]:focus-visible {
+  color: #0a66c2;
+}
+
+/* Instagram's icon is drawn in its gradient; held white until pointed at */
+.site-links a[data-brand="instagram"]:not(:hover, :focus-visible) g {
+  stroke: currentColor;
+}
+
+.site-links a[data-brand="instagram"]:not(:hover, :focus-visible) svg > circle {
+  fill: currentColor;
+}
+
+.site-links svg {
+  width: 100%;
+  height: 100%;
+}
+
 @media (min-width: 64rem) {
   .site-banner {
+    padding-inline: 2rem;
+  }
+}
+
+/* ---------- Aside ---------- */
+
+/* A quiet note between the about section and the projects */
+.aside {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: rgb(243 239 231 / 0.5);
+}
+
+/* The sign-off at the very end of the page */
+.aside-end {
+  padding-top: clamp(1rem, 3vh, 2rem);
+}
+
+.aside a {
+  color: rgb(243 239 231 / 0.8);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.aside a:hover {
+  color: var(--paper);
+}
+
+/* ---------- Recent projects ---------- */
+
+/* A plain two-column list: one short row per project. The top matches the
+   other sections' gaps. */
+.recent {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: calc(clamp(3rem, 10vh, 6rem) + 10px) 1rem clamp(2rem, 6vh, 4rem);
+}
+
+.recent-heading {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-variation-settings: var(--display-settings);
+  letter-spacing: var(--display-tracking);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.05;
+  margin-bottom: 1.25rem;
+}
+
+.recent-list {
+  display: grid;
+  column-gap: 2.5rem;
+}
+
+.recent-list li {
+  padding: 0.9rem 0;
+  border-top: 1px solid rgb(243 239 231 / 0.12);
+}
+
+.recent-title {
+  font-weight: 600;
+}
+
+.recent-meta {
+  margin-left: 0.6em;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: rgb(243 239 231 / 0.5);
+}
+
+.recent-description {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgb(243 239 231 / 0.68);
+}
+
+/* What it was built with, as small tags */
+.recent-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.recent-tools li {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid rgb(243 239 231 / 0.14);
+  border-radius: 999px;
+  font-family: var(--font-label);
+  font-size: 0.68rem;
+  color: rgb(243 239 231 / 0.6);
+}
+
+/* Internal work has no links; drop the empty row */
+.recent-links:empty {
+  display: none;
+}
+
+.recent-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.35rem;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+}
+
+.recent-links a {
+  color: var(--silver);
+}
+
+.recent-links a:hover {
+  color: var(--paper);
+  text-decoration: underline;
+}
+
+@media (min-width: 48rem) {
+  .recent-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 64rem) {
+  .recent {
     padding-inline: 2rem;
   }
 }
@@ -134,86 +313,54 @@ main {
 
 .about-body {
   max-width: 32rem;
-  margin-top: 1rem;
+  margin-top: 1.6rem;
   font-size: 1.05rem;
   line-height: 1.6;
   color: rgb(243 239 231 / 0.75);
 }
 
-.about-body:first-of-type {
-  color: var(--paper);
+/* The facts on one line, split by dots, sized to span the text column.
+   The line is about 24.5em long in the mono font. */
+.about-text {
+  container-type: inline-size;
 }
 
-/* A stat sheet, like the dunking section's */
 .about-facts {
   display: flex;
   flex-wrap: wrap;
-  width: fit-content;
-  margin-top: 1.75rem;
-  border-block: 1px solid rgb(243 239 231 / 0.35);
-}
-
-.about-facts > div {
-  padding: 0.45rem 1.6rem 0.5rem 0;
-}
-
-.about-facts > div + div {
-  padding-left: 1.6rem;
-  border-left: 1px solid rgb(243 239 231 / 0.35);
-}
-
-.about-facts dt {
+  gap: 0.25rem 0;
+  margin-top: 1.25rem;
   font-family: var(--font-label);
-  font-size: 0.75rem;
+  font-size: min(100cqw / 24.5, 1.15rem);
   color: rgb(243 239 231 / 0.6);
 }
 
-.about-facts dd {
-  font-family: var(--font-display);
-  font-weight: var(--display-weight);
-  font-variation-settings: var(--display-settings);
-  font-size: 1.5rem;
-  line-height: 1.15;
-}
-
-.about-facts a:hover {
-  color: #f2c94c;
-}
-
-/* Tighter on a phone, so all three facts share one row */
-@media (max-width: 30rem) {
-  .about-facts {
-    flex-wrap: nowrap;
-  }
-
-  .about-facts > div {
-    padding-right: 0.9rem;
-  }
-
-  .about-facts > div + div {
-    padding-left: 0.9rem;
-  }
-
-  .about-facts dd {
-    font-size: 1.2rem;
-  }
+.about-facts li + li::before {
+  content: "·";
+  margin: 0 0.6em;
+  color: rgb(243 239 231 / 0.35);
 }
 
 .about .ds-viewer {
   width: 100%;
-  max-width: 34rem;
+  max-width: 46rem;
   justify-self: center;
 }
 
 @media (min-width: 64rem) {
   .about {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
+    gap: 3rem;
     padding-inline: 2rem;
   }
 
   .about .ds-viewer {
     justify-self: end;
+  }
+
+  /* Sits a little below centre, nearer the 3DS's screens */
+  .about-text {
+    margin-top: 3rem;
   }
 }
 
@@ -225,7 +372,7 @@ main {
   gap: 1.25rem;
   max-width: 72rem;
   margin: 0 auto;
-  padding: clamp(1.5rem, 8vh, 6rem) 1rem;
+  padding: calc(clamp(1.5rem, 8vh, 6rem) + 10px) 1rem clamp(1.5rem, 8vh, 6rem);
 }
 
 .reel-film,
@@ -326,8 +473,8 @@ main {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background: #e5533d;
-  box-shadow: 0 0 0.5rem rgb(229 83 61 / 0.7);
+  background: var(--accent-light);
+  box-shadow: 0 0 0.5rem rgb(from var(--accent-light) r g b / 0.7);
 }
 
 @media (min-width: 64rem) {
@@ -887,4 +1034,82 @@ main {
 .game-modal-actions a:hover {
   background: var(--graphite);
   color: var(--paper);
+}
+
+/* ---------- Section nav ---------- */
+
+/* A dock floating at the bottom of the screen; room is left under the page
+   so it never covers the end of it */
+main {
+  padding-bottom: 9rem;
+}
+
+.section-nav {
+  position: fixed;
+  left: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 50;
+  translate: -50% 0;
+  max-width: calc(100vw - 1rem);
+}
+
+.section-nav ul {
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.3rem;
+  border: 1px solid rgb(243 239 231 / 0.12);
+  border-radius: 999px;
+  background: rgb(28 28 27 / 0.82);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.45);
+}
+
+.section-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: rgb(243 239 231 / 0.6);
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.section-nav a:hover {
+  color: var(--paper);
+  background: rgb(243 239 231 / 0.06);
+}
+
+.section-nav a[aria-current] {
+  color: var(--paper);
+  background: rgb(243 239 231 / 0.1);
+}
+
+/* Unlit until its section is on screen, then glows red like the 3DS's
+   power light */
+.section-nav-led {
+  width: 0.4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgb(243 239 231 / 0.18);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.section-nav a[aria-current] .section-nav-led {
+  background: var(--accent-light);
+  box-shadow: 0 0 0.4rem 0.1rem rgb(from var(--accent-light) r g b / 0.6);
+}
+
+@media (max-width: 30rem) {
+  .section-nav a {
+    gap: 0.35rem;
+    padding: 0.45rem 0.55rem;
+    font-size: 0.7rem;
+  }
 }

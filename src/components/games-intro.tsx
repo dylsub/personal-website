@@ -5,7 +5,7 @@ import "./games-intro.css";
 export function GamesIntro() {
   const { heading, stages } = gamesIntro;
   return (
-    <section className="games-intro">
+    <section id="games" className="games-intro">
       <h2 className="games-intro-heading">{heading}</h2>
       <ol className="level-path">
         {stages.map((stage, i) => (

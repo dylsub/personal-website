@@ -12,7 +12,7 @@ export const gamesIntro = {
     },
     {
       title: "Four awards",
-      text: "My games have won awards at 4 game jams, including 1st place at the SkillsUSA State Competition for Smog City.",
+      text: "My games have won 4 awards: 3 at SkillsUSA competitions, including 1st place at State for Smog City, and an honorable mention at Kajam.",
     },
     {
       title: "Next",
