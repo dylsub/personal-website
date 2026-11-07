@@ -7,7 +7,12 @@ const spectrumText = document.querySelector(".spectrum-text");
 const testHeader = document.querySelector(".section-test-h2");
 const sectionTest = document.querySelector(".section-test");
 const spectrumIMG = document.querySelector(".spectrum");
-const versionToggle = document.querySelector(".version-toggle");
+const versionToggles = document.querySelector(".version-toggles");
+
+// Question files for the alternate versions, keyed by the ?version= param.
+const versionFiles = {
+    "claude": "new-design.md"
+};
 
 let scoreCount = 0;
 let totalCount = 0;
@@ -45,7 +50,7 @@ resultBtn.addEventListener("click", function (e)
     resultText.style.display = "block";
     resultBtn.style.display = "none";
     restartBtn.style.display = "block";
-    versionToggle.style.display = "none";
+    versionToggles.style.display = "none";
     document.querySelector(".claude-disclaimer").style.display = "none";
     spectrumIMG.style.display = "block";
     resultText.textContent = "Final Score: " + (totalCount - scoreCount) + "/" + totalCount + " (" + scorePercentage + "%) ";
@@ -71,19 +76,23 @@ function deleteQuestions()
 
 }
 
-if (new URLSearchParams(location.search).get("version") === "claude")
+let version = new URLSearchParams(location.search).get("version");
+if (!versionFiles.hasOwnProperty(version))
 {
-    versionToggle.textContent = "Take The Original";
-    versionToggle.href = "?#test";
+    version = "original";
+}
+document.querySelector('.version-toggle[data-version="' + version + '"]').style.display = "none";
+if (version !== "original")
+{
     document.querySelector(".claude-disclaimer").style.display = "block";
-    loadClaudeQuestions();
+    loadQuestions(versionFiles[version]);
 }
 
-// Swaps the original questions for the ones in new-design.md
+// Swaps the original questions for the ones in a version's .md file
 // ("## Category" headings and "N. [good|bad] Question" lines).
-function loadClaudeQuestions()
+function loadQuestions(file)
 {
-    fetch("new-design.md")
+    fetch(file)
         .then(function (res)
         {
             return res.text();

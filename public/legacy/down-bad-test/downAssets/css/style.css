@@ -179,10 +179,15 @@ header {
     margin-bottom: 25px;
 }
 
+.version-toggles {
+    margin: -15px auto 10px auto;
+    text-align: center;
+}
+
 .version-toggle:link,
 .version-toggle:visited {
-    display: table;
-    margin: -15px auto 10px auto;
+    display: inline-block;
+    margin: 0 5px 8px 5px;
     border: 2px solid purple;
     border-radius: 20px;
     padding: 6px 20px;
