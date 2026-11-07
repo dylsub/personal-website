@@ -179,6 +179,34 @@ header {
     margin-bottom: 25px;
 }
 
+.version-toggle:link,
+.version-toggle:visited {
+    display: table;
+    margin: -15px auto 10px auto;
+    border: 2px solid purple;
+    border-radius: 20px;
+    padding: 6px 20px;
+    color: purple;
+    font-size: 70%;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.1s, color 0.1s;
+}
+
+.version-toggle:active,
+.version-toggle:hover {
+    background-color: purple;
+    color: #fff;
+}
+
+.section-test .claude-disclaimer {
+    display: none;
+    float: none;
+    text-align: center;
+    font-size: 70%;
+    font-style: italic;
+}
+
 .section-test input{
     float: left;
     margin-top: 8px;
