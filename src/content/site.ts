@@ -8,6 +8,7 @@ export const site = {
     "Hey, I'm Dylan Subramanian. Welcome to my portfolio, a collection of the things I've built over the years. Take a look around!",
   email: "dylansubramanian@gmail.com",
   linkedin: "https://www.linkedin.com/in/dylsub/",
+  github: "https://github.com/dylsub",
   x: "https://x.com/dylsub",
   /** Instagram handle, without the @ */
   instagram: "dylsub",

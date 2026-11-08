@@ -115,8 +115,8 @@ main {
 }
 
 /* Profile links under the byline: white icons that take on each brand's
-   colour when pointed at. X's own colours are black and white, so it just
-   lifts. */
+   colour when pointed at. X's and GitHub's own colours are black and white,
+   so they just lift. */
 .site-links {
   display: flex;
   gap: 0.9rem;

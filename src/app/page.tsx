@@ -2,6 +2,7 @@ import { Binder } from "@/components/binder/binder";
 import { DunkPlayer } from "@/components/dunk-player";
 import { ThreeDSViewer } from "@/components/three-ds/three-ds-viewer";
 import { GamesIntro } from "@/components/games-intro";
+import { GitHubIcon } from "@/components/github-icon";
 import { InstagramIcon } from "@/components/instagram-icon";
 import { LinkedInIcon } from "@/components/linkedin-icon";
 import { XIcon } from "@/components/x-icon";
@@ -76,6 +77,17 @@ export default function Home() {
               data-brand="linkedin"
             >
               <LinkedInIcon />
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              data-brand="github"
+            >
+              <GitHubIcon />
             </a>
           </li>
           <li>
